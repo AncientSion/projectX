@@ -16,12 +16,12 @@ class DBManager {
 						//	"147147",
 							array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 		}
-		if ($this->connection != null){
-			Debug::log("Connection established");
-		}
-		else {
-			Debug::log("Failure connecting");
-		}
+	//	if ($this->connection != null){
+	//		Debug::log("Connection established");
+	//	}
+	//	else {
+	//		Debug::log("Failure connecting");
+	//	}
 	}
 	
 	static public function app(){

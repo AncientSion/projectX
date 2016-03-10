@@ -14,12 +14,12 @@ if (isset($_POST["username"]) && isset($_POST["password"])){
 	if ( $_POST["username"] != "" && $_POST["password"] != "" ){
 		$dbManager = DBManager::app();
 
-		if ($dbManager){
-			echo "Connection established</br>";
-		}
-		else {
-			echo "no conn established</br>";
-		}
+	//	if ($dbManager){
+	//		echo "Connection established</br>";
+	//	}
+	//	else {
+	//		echo "no conn established</br>";
+	//	}
 
 		$id = $dbManager->validateLogin($_POST["username"], $_POST["password"]);
 		if ($id){
