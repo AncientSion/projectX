@@ -9,7 +9,7 @@ class DBManager {
 	function __construct(){
 
 		if ($this->connection === null){
-			$this->connection = new PDO("mysql:host=localhost;dbname=projectX",
+			$this->connection = new PDO("mysql:host=localhost;dbname=projectx",
 							"aatu",
 							"Kiiski",
 						//	"root",
