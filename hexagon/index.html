@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel='stylesheet' href='style.css'/>
+	<script src="jquery-2.1.1.min.js"></script>
+	<script src='script.js'></script>
+	<script src='HexagonTools.js'></script>
+	<script src='Grid.js'></script>
+	<script src='HexCalcs.js'></script>
+	<script src='baseClasses.js'></script>
+	<script src='baseEvents.js'></script>
+	<script src='movement.js'></script>
+	<script src='ajaxManager.js'></script>
+	<script src='admin.js'></script>
+	<script src='cam.js'></script>
+</head>
+	<body> 	
+		<div id="interface">
+			<div id="currentPos" style="color:red"></div>
+			<input type="button" value="Initialisieren" onclick="init()">
+			<input type="button" value="Zug Beenden (todo)" onclick="end()">
+			<input type="form" id="sideLength" style="width: 50px; text-align: center" value="25">
+			<input type="form" id="zoom" style="width: 50px; text-align: center" value="1">
+			<input type="button" value="Hexfeld" onclick="switchCanvas('hex')">
+			<input type="button" value="Sprung" onclick="switchCanvas('jump')">
+			<input type="button" value="Bewegung" onclick="switchCanvas('move')">
+			<input type="button" value="Objekte" onclick="switchCanvas('obj')">
+			<input type="button" value="Mausreaktion" onclick="switchCanvas('mouse')">
+			<input type="button" id="adminButton" value="Admin Modus (inaktiv)" onclick ="switchAdminMode()">
+		</div>
+		<div id="gui"></div>
+		<canvas id="jumpCanvas"></canvas>
+		<canvas id="objCanvas"></canvas>
+		<canvas id="moveCanvas"></canvas>
+		<canvas id="hexCanvas"></canvas>
+		<canvas id="mouseCanvas"></canvas>
+	</body>
+</html>

@@ -1,0 +1,224 @@
+.popup {
+	color: red;
+	background-color: black;
+	font-size: 20px;
+	z-index: 10;
+	margin: auto;
+	margin-top: 200px;
+	margin-left: 200px;
+	position: absolute;
+	display: inline-block;
+	width: 500px;
+}
+
+
+#hexCanvas {
+	background:url(img/background.jpg);
+}
+
+.lobbyDiv {
+	margin: auto;
+	margin-top: 40px;
+	border: 1px solid white;
+	display: block;
+	width: 300px;
+	text-align: center;
+}
+
+#registerDiv {
+	margin: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 1px solid white;
+	display: none;
+	width: 300px;
+	text-align: center;
+}
+
+table {
+	border: 1px solid white;
+}
+
+th {
+	border-bottom: 1px solid white;
+}
+
+
+table, tr, td, a {
+	text-align: center;
+	margin: auto;
+}
+
+input {
+	width: 150px;
+	margin: auto;
+	text-align: center;
+	position: relative;
+	border: 2px solid red;
+	padding: 2px;
+	cursor: pointer;
+
+}
+
+.hidden {
+	display: none;
+}
+
+body {
+	font-family: arial;
+	font-size: 15px;
+	color: white;
+	background-color: black;
+}
+
+a, a:visited {
+	color: white;
+}
+
+canvas {
+	border: 1px solid white;
+	margin: auto;
+	position: absolute;
+}
+
+div {
+	border: 1px solid white;
+}
+
+.centerText {
+	text-align: center;
+}
+
+#interface {
+	display: block;
+	margin: auto;
+	width: 60%;
+}
+
+#hexCanvas {
+	z-index: 1;
+}
+
+#jumpCanvas {
+	z-index: 2;
+}
+	
+#moveCanvas {
+	z-index: 3;
+}
+
+#objCanvas {
+	z-index: 4;
+}
+
+#mouseCanvas {
+	z-index: 5;
+}
+
+#gui {
+	float: left;
+	width: 400px;
+	margin-right: 20px;
+}
+
+.systemHeader {
+	display: table;
+	margin: 0 auto;
+	font-weight: bold;
+	font-size: 14px;
+	border-bottom: 2px solid white;
+}
+	
+.hoverDiv {
+	display: inline-block;
+	background-color: red;
+	position: absolute;
+	z-index: 6;
+	width: 80px;
+	text-align: center;
+}
+
+.disabled {
+	display: none;
+}
+
+.fleetSelected {
+	background-color: gray;
+}
+
+.fleetNormal {
+	background-color: black;
+}
+
+.jumpgateTable {
+	width: 90%;
+	margin: auto;
+	margin-top: 20px;
+}
+
+.planetTable {
+	width: 90%;
+	margin: auto;
+	margin-top: 20px;
+}
+
+.fleetTable {
+	width: 90%;
+	margin: auto;
+	margin-top: 20px;
+}
+
+#sectorCreationDiv {
+	position: absolute;
+	background-color: black;
+	width: auto;
+	height: auto;
+	margin-top: 50px;
+	margin-left: 200px;
+	z-index: 10;
+}
+
+#planetCreationDiv {
+	position: absolute;
+	background-color: black;
+	width: auto;
+	height: auto;
+	margin-top: 50px;
+	margin-left: 200px;
+	z-index: 10;
+}
+
+#fleetCreationDiv {
+	position: absolute;
+	background-color: black;
+	margin-left: 200px;
+	z-index: 10;
+}
+
+#laneCreationDiv {
+	position: absolute;
+	background-color: black;
+	width: auto;
+	height: auto;
+	margin-top: 50px;
+	margin-left: 200px;
+	z-index: 10;
+}
+#gateCreationDiv {
+	position: absolute;
+	background-color: black;
+	width: auto;
+	height: auto;
+	margin-top: 50px;
+	margin-left: 200px;
+	z-index: 10;
+}
+
+#adminPlanets, #adminGates, #adminLanes, #adminFleets {
+	width: 650px;
+	border: 2px solid white;
+}
+
+.shipSelected {
+	background-color: blue;
+}
