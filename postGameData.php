@@ -16,7 +16,7 @@ if (isset($_POST["lanes"])){
 	$lanes = JSON_decode($_POST["lanes"]);
 
 	foreach ($lanes as $lane){
-		if ($dbManager->insertLane($lane)){		
+		if ($dbManager->insertLane($lane, $_SESSION["gameid"])){		
 			Debug::log("lane created");
 		}
 		else {

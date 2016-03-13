@@ -70,7 +70,7 @@ class Manager {
 	}
 	
 	public function getPlanets(){
-		$planets = DBManager::app()->getPlanets($this->userid);
+		$planets = DBManager::app()->getPlanets($this->userid, $this->gameid);
 		
 		if ($planets){
 			return $planets;
@@ -86,7 +86,7 @@ class Manager {
 	}
 	
 	public function getLanes(){
-		$lanes = DBManager::app()->getLanes($this->userid);
+		$lanes = DBManager::app()->getLanes($this->userid, $this->gameid);
 		
 		if ($lanes){
 			return $lanes;

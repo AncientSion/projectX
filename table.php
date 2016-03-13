@@ -20,20 +20,20 @@ session_start();
 		die ("no link");
 	}
 
-	$sql = "CREATE DATABASE " . $db;
+/*	$sql = "CREATE DATABASE " . $db;
 	if (mysql_query($sql, $connect)) {
 		echo "db success</br>";
 	}
 	else {
 		debug::log(mysql_error($connect));
 	}
-
+*/
 mysql_select_db($db);
 
 
 
 $sql = array();
-	
+	/*
 	
 $sql[] = "CREATE TABLE jumplanes (
 			id INT (5) AUTO_INCREMENT PRIMARY KEY,
@@ -147,6 +147,9 @@ $sql[] = "CREATE TABLE sectorspecials (
 			type VARCHAR (255)
 			)";
 
+			*/
+
+$sql[] = "ALTER TABLE jumplanes ADD gameid INT (3) AFTER id";
 
 	foreach ($sql as $query){
 		if (mysql_query($query, $connect)) {

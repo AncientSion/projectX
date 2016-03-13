@@ -147,40 +147,7 @@ Hexagon.prototype.draw = function(ctx){
 	
 	ctx.globalCompositeOperation = "source-over";
 	ctx.stroke();
-	
-	ctx.beginPath();
-	ctx.font = "bolder " + 7*cam.zoom +"pt Trebuchet MS,Tahoma,Verdana,Arial,sans-serif";
-	ctx.textAlign = "center";
-	ctx.textBaseline = 'middle';
-	ctx.closePath();
-	
-	var text = "";
-	
-	if (this.id[0] < 10){
-		text += 0
-		text += this.id[0];
-	}
-	else {
-		text += this.id[0];
-	}
-	
-		text+= ", ";
-	
-	if (this.id[1] < 10){
-		text += 0
-		text += this.id[1];
-	}
-	else {
-		text += this.id[1];
-	}
-	
-	
-	ctx.fillStyle = "white";
-	ctx.fillText(
-				text,
-				this.center.x + cam.offSet.x,
-				this.center.y + cam.offSet.y -(this.size / 1.8)
-				);				
+				
 };
 
 Hexagon.prototype.checkHighlight = function(){
@@ -199,6 +166,7 @@ Hexagon.prototype.drawContent = function(ctx){
 
 	var planet = false;
 	var fleets = 0;
+	var specials = false
 
 	for (var i = 0; i < this.contains.length; i++){
 		if (this.contains[i] instanceof Planet){
@@ -208,13 +176,28 @@ Hexagon.prototype.drawContent = function(ctx){
 			fleets++;
 		}
 	}
-	
+
 	ctx.strokeStyle = "black";
-		
+
+
+
+	if (this.specials.length > 0){
+		var size = this.size;
+		var iconSize = this.specials[0].icon.width;
+		var newSize = iconSize / 3  * cam.zoom;
+		ctx.drawImage(
+					this.specials[0].icon,
+					this.center.x + cam.offSet.x - newSize/2,
+					this.center.y + cam.offSet.y - newSize/2,
+					newSize,
+					newSize
+					);
+	}
+
+
 	if (planet){
 		var size = this.size;
-		var iconSize = image.width;
-		var newSize = iconSize / 6 * cam.zoom;
+		var newSize = 100 / 6 * cam.zoom;
 
 		ctx.drawImage(
 					planet.icon,
@@ -307,62 +290,42 @@ Hexagon.prototype.drawContent = function(ctx){
 		ctx.closePath();
 	}
 			
-}
-/* Old interpolation lanes
-Hexagon.prototype.drawLaneOnHexGrid = function(ctx){
-	ctx.clearRect(0, 0, width, height);
+
+	ctx.beginPath();
+	ctx.font = "bolder " + 7*cam.zoom +"pt Trebuchet MS,Tahoma,Verdana,Arial,sans-serif";
+	ctx.textAlign = "center";
+	ctx.textBaseline = 'middle';
 	
-	if (this.hasJumpgate){
-		for (var item in this.contains){
-			if (this.contains[item].type == "Jumpgate"){
-				var gate = this.contains[item];
-				
-				var start = new Point(this.center.x, this.center.y);
-				
-				for (var i = 0; i < gate.links.length; i++){
-					var targetHex = grid.getHexById(gate.links[i]);
-					var end = new Point(targetHex.center.x, targetHex.center.y);
-					
-					var vector = new Vector(start, end);
-					var dist = grid.getHexDistance(this, targetHex);
-					var step = new Point(vector.x/dist, vector.y/dist);
-					
-					ctx.beginPath();
-					for (var j = 0; j < dist+1; j++){
-						var point = new Point(this.center.x + (step.x*j), this.center.y + (step.y*j));
-						var hex = grid.getHexAtPos(point);
-						
-						ctx.moveTo(hex.points[0].x, hex.points[0].y);
-						
-						for (var k = 1; k < hex.points.length; k++){
-							var p = hex.points[k];
-							ctx.lineTo(p.x, p.y);
-						}
-						ctx.fillStyle = "darkcyan";
-						ctx.fill();
-					}
-					ctx.closePath();
-					
-					
-					var line = new Line(this.center.x, this.center.y, targetHex.center.x, targetHex.center.y);
-					var toDraw = [];
-						toDraw.push(line);
-					
-					for (var j = 0; j < toDraw.length; j++){
-						ctx.beginPath();
-						ctx.moveTo(toDraw[j].x1, toDraw[j].y1);
-						ctx.lineTo(toDraw[j].x2, toDraw[j].y2);
-						ctx.closePath();
-						ctx.strokeStyle = "lightskyblue";
-						ctx.lineWidth = 10;
-						ctx.stroke();
-					}
-				}
-			}
-		}	
-	}	
+	var text = "";
+	
+	if (this.id[0] < 10){
+		text += 0
+		text += this.id[0];
+	}
+	else {
+		text += this.id[0];
+	}
+	
+		text+= ", ";
+	
+	if (this.id[1] < 10){
+		text += 0
+		text += this.id[1];
+	}
+	else {
+		text += this.id[1];
+	}
+	
+	
+	ctx.fillStyle = "white";
+	ctx.fillText(
+				text,
+				this.center.x + cam.offSet.x,
+				this.center.y + cam.offSet.y -(this.size / 1.8)
+				);	
+	ctx.closePath();
+
 }
-*/
 
 
 Hexagon.prototype.drawLanes = function(ctx){

@@ -109,15 +109,23 @@ else {
 
 	function startGame(){
 		console.log("startGame");
-		ajax.startGame(gameid, refresh);
+		ajax.startGame(gameid, redirect);
 	}
 
 	function refresh(data){
 		console.log("refresh");
 		console.log(data);
-		setTimeout(function(){
-			window.location.reload(true);
+	setTimeout(function(){
+		window.location.reload(true);
 		}, 500);
 	}
+
+	function redirect(url){
+		console.log("redirect");
+		setTimeout(function(){
+			window.location = "lobby.php"
+		}, 500);
+	}
+
 
 </script>

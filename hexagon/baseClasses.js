@@ -41,7 +41,6 @@ function Planet(id, owner, name, loc, level, baseIncome, baseTrade, type, enviro
 	this.notes = [];
 	this.tempNotes = [notes_1, notes_2, notes_3];
 
-
 	this.creation = function(){
 		for (var i = 0; i < this.tempNotes.length; i++){
 			if (this.tempNotes[i] != null){

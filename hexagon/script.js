@@ -95,6 +95,19 @@ for (var i = 0; i < types.length; i++){
 	asteroid_icons.push(image);
 }
 
+var types = ["blackhole", "nebula", "supernova", "radiationcloud", "vortex", "hyperspacewaveforms"];
+var special_icons = [];
+
+for (var i = 0; i < types.length; i++){
+	var image = new Image();
+		image.src = "img/" + types[i] + ".png";
+		image.type = types[i];
+
+	special_icons.push(image);
+
+
+
+}
 
 
 function enableHoverDiv(hex, pos){
@@ -129,12 +142,29 @@ function updateGUI(hex){
 
 	var div = document.getElementById("gui");
 		div.innerHTML = "";
+
 	
-	var span = document.createElement("span");
-		span.className = "systemHeader";
-		span.innerHTML = "System: " + hex.id;
+	var table = document.createElement("table");
+		table.style.border = "none";
+	var tr = document.createElement("tr");
+		tr.style.border = "none";
+	var th = document.createElement("th");
+		th.innerHTML = "System: " + hex.id;
+
+		tr.appendChild(th);
+		table.appendChild(tr);
+
+	if (hex.specials.length > 0){
+		var tr = document.createElement("tr");
+		var td = document.createElement("td");
+			td.style.border = "none";
+			td.innerHTML = "<font color = 'red'>" + hex.specials[0].type + "</font>";
 	
-	div.appendChild(span);
+		tr.appendChild(td);
+		table.appendChild(tr);
+	}
+
+	div.appendChild(table);
 		
 	for (var i = 0; i < hex.contains.length; i++){
 
@@ -439,6 +469,7 @@ function updateGUI(hex){
 			var tr = document.createElement("tr");
 			
 			var td = document.createElement("td");
+				td.className = "disabled";
 				td.colSpan = keys.length+1
 				td.style.backgroundColor = "red"
 				td.id = "moveFleet" + hex.contains[i].id;
@@ -471,27 +502,24 @@ function updateGUI(hex){
 						});
 					
 						td.className = "centerText";
-						td.colSpan = 2;
-						td.innerHTML = "Moving to: ";
-						
-					var html = moveManager.orders[k].moves[moveManager.orders[k].moves.length-1];	
-						
-						td.innerHTML += html;
+						td.colSpan = 6;
+
+						var html = moveManager.orders[k].moves[moveManager.orders[k].moves.length-1];	
+
+						td.innerHTML = "<font color = 'red'> Moving to: " + html + "</font>";
 						
 						tr.appendChild(td);
 						table.appendChild(tr);
 					
 					
 					var tr = document.createElement("tr");
-					var td = document.createElement("td");
+					var td = document.createElement("td");						
 						td.className = "centerText";
-						td.colSpan = 2;
-						td.innerHTML = "Required HMP: ";
+						td.colSpan = 6;
 
 						var html = moveManager.orders[k].getTotalHMP();
 
-						td.innerHTML += html;
-						
+						td.innerHTML = "<font color = 'red'>Required HMP: " + html + "</font>";						
 						tr.appendChild(td);
 						table.appendChild(tr);
 				}

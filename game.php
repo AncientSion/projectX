@@ -75,7 +75,6 @@ if (isset($_SESSION["userid"])
 		
 		
 		<div id="interface">
-		<!--
 			<div id="currentPos" style="color:red"></div>
 			<input type="button" value="Initialisieren" onclick="init()">
 			<input type="form" id="sideLength" style="width: 50px; text-align: center" value="25">
@@ -85,7 +84,6 @@ if (isset($_SESSION["userid"])
 			<input type="button" value="Bewegung" onclick="switchCanvas('move')">
 			<input type="button" value="Objekte" onclick="switchCanvas('obj')">
 			<input type="button" value="Mausreaktion" onclick="switchCanvas('mouse')">
-		-->
 			<input type="button" value="Zug Beenden (todo)" onclick="endTurn()">
 			<input type="button" id="adminButton" value="Admin Modus (inaktiv)" onclick ="switchAdminMode()">
 			
@@ -131,10 +129,10 @@ if (isset($_SESSION["userid"])
 		<div style="margin: auto; display: block; width: 60%;">
 			<div id="gui">
 			</div>
-			<canvas id="jumpCanvas"></canvas>
-			<canvas id="objCanvas"></canvas>
-			<canvas id="moveCanvas"></canvas>
 			<canvas id="hexCanvas"></canvas>
+			<canvas id="jumpCanvas"></canvas>
+			<canvas id="moveCanvas"></canvas>
+			<canvas id="objCanvas"></canvas>
 			<canvas id="mouseCanvas"></canvas>
 		</div>
 	</body>

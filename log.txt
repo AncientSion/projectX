@@ -1,0 +1,13 @@
+get game: 1
+get game: 1
+getSectors
+user1
+game1
+result
+get game: 1
+get game: 1
+get game: 1
+lanes: 1
+get game: 1
+get game: 1
+get game: 1

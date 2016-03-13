@@ -170,17 +170,38 @@ window.ajax = {
 
 	parseSectors: function(list){
 		list = JSON.parse(list);
-		console.log(list);
 
 		if (list){		
 			for (var i = 0; i < list.length; i++){
 				var data = list[i];
+				var icon;
 				
 				for (var j = 0; j < grid.hexes.length; j++){
 					if (data.x == grid.hexes[j].x && data.y == grid.hexes[j].y){
 						grid.hexes[j].specials.push(list[i]);
-						grid.hexes[j].specials.push(list[i]);
-						continue;
+
+						if (data.type == "Black Hole"){
+							icon = special_icons[0];
+						}
+						else if (data.type == "Nebula"){
+							icon = special_icons[1];
+						}
+						else if (data.type == "Supernova"){
+							icon = special_icons[2];
+						}
+						else if (data.type == "Radiation Cloud"){
+							icon = special_icons[3];
+						}
+						else if (data.type == "Vortex"){
+							icon = special_icons[4];
+						}
+						else if (data.type == "Hyperspace Waveforms"){
+							icon = special_icons[5];
+						}
+
+						grid.hexes[j].specials[grid.hexes[j].specials.length-1].icon = icon;
+						break;
+
 					}
 				}
 			}
@@ -190,7 +211,7 @@ window.ajax = {
 	postPlanets: function(planets){
 	
 		planets = JSON.stringify(planets);
-		console.log(planets);
+	//	console.log(planets);
 	
 		$.ajax({
 			type: "POST",
@@ -361,8 +382,7 @@ window.ajax = {
 		list = JSON.parse(list);
 
 
-		if (list){
-			
+		if (list){			
 			var lanes = [];
 			
 			for (var i = 0; i < list.length; i++){
@@ -376,8 +396,11 @@ window.ajax = {
 				for (var j in data){
 					if (j == "id"){
 						lane.id = data[j];
-					}				
-					else if (data[j] == null){	
+					}
+					else if (j == "gameid"){
+						continue;
+					}
+					else if (data[j] == null){
 					//	console.log("break");			
 						break;
 					}

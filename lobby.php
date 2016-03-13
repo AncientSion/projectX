@@ -38,6 +38,7 @@ if (isset($_SESSION["userid"])){
 		
 		foreach ($ongoingGames as $game){
 
+
 			$gameStatus = $manager->getGameStatus($game["id"], $game["turn"]);
 			
 			$ongoingGamesElement .= "<tr>";
@@ -167,6 +168,5 @@ function refresh(data){
 		window.location.reload(true);
 	}, 500);
 }
-
 
 </script>

@@ -140,7 +140,8 @@ function mouseCanvasScroll(e){
 	}
 }
 
-function moveorderClick(){
+function moveorderClick(e){
+	e.stopPropagation();
 	if (selectedFleet){
 		if (this.id.substr(9) == selectedFleet.id){
 			if (this.innerHTML == "Plan Movement"){
@@ -156,23 +157,34 @@ function moveorderClick(){
 
 			
 function fleetTableClick(e){
+//	console.log("ding");
 	if (!selectedFleet){
-		console.log("enable");
+		//console.log("1");
 		selectedFleet = selectedHex.getFleetById(this.id.substr(5));
 		document.getElementById("fleet" + selectedFleet.id).className = "fleetTable fleetSelected";
+		document.getElementById("moveFleet" + selectedFleet.id).className = "";
+
 	}
 	else if (selectedFleet.id == this.id.substr(5)){
-		console.log("ding");
-		document.getElementById("fleet" + selectedFleet.id).className = "fleetTable fleetNormal";
-		selectedFleet = false;
+		if (moveManager.activeFleet){
+			return;
+		}
+		else {
+		//	console.log("2");
+			document.getElementById("fleet" + selectedFleet.id).className = "fleetTable fleetNormal";
+			document.getElementById("moveFleet" + selectedFleet.id).className = "disabled";
+			selectedFleet = false;
+		}
 	}
 	else if (!moveManager.activeFleet){
-		console.log("else if");
+	//	console.log("3");
 		document.getElementById("fleet" + selectedFleet.id).className = "fleetTable fleetNormal";
+		document.getElementById("moveFleet" + selectedFleet.id).className = "disabled";
 		selectedFleet = false;
 		
 		selectedFleet = selectedHex.getFleetById(this.id.substr(5));
 		document.getElementById("fleet" + selectedFleet.id).className = "fleetTable fleetSelected";
+		document.getElementById("moveFleet" + selectedFleet.id).className = "";
 	}
 
 
