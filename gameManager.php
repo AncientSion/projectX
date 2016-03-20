@@ -61,6 +61,13 @@ class Manager {
 		}
 	}
 	
+	public function getMarkers(){
+		$markers = DBManager::app()->getMarkers($this->userid, $this->gameid);
+		
+		if ($markers){
+			return $markers;
+		}
+	}
 	public function getSectors(){
 		$sectors = DBManager::app()->getSectors($this->userid, $this->gameid);
 		
@@ -117,11 +124,14 @@ class Manager {
 		}
 	}
 
-	public function insertMoves($moves){
-		$moves = JSON_decode($_POST["moves"], true);
-			
-		foreach ($moves as $move){
-			DBManager::app()->insertSubmoves($move);
+	public function insertMoves(){
+		Debug::log("insertMoves");
+		$order = JSON_decode($_POST["moveOrder"], true);
+		if (DBManager::app()->insertMoves($order)){
+			return true;
+		}
+		else {
+			echo "insert moves error";
 		}
 	}
 

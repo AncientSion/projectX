@@ -82,16 +82,15 @@ else if (isset($_POST["fleets"])){
 		}
 	}
 }
-else if (isset($_POST["moves"])){	
-	$moves = JSON_decode($_POST["moves"], true);	
+else if (isset($_POST["moveOrder"])){
+	Debug::log("MOVES");
+	$moves = JSON_decode($_POST["moveOrder"], true);	
+
 	$return = $manager->insertMoves($moves);
 
 	if ($return){
 		Debug::log("moves success");
 	}
-}
-else if (isset($_POST["order"])){
-	$manager->endCurrentTurn();	
 }
 else if (isset($_POST["type"])){
 	if ($_POST["type"] == "join"){
@@ -115,6 +114,15 @@ else if (isset($_POST["type"])){
 			return true;
 		}
 	}
+}
+else if (isset($_POST["nameChange"])){
+	$dbManager->changeName($_POST["nameChange"]);	
+}
+else if (isset($_POST["shipTransfer"])){
+	$dbManager->shipTransfer($_POST["shipTransfer"]);	
+}
+else if (isset($_POST["createMarker"])){
+	$dbManager->createMarker($_POST["createMarker"]);	
 }
 else {
 	echo "no data to be found";

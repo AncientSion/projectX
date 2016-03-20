@@ -37,6 +37,7 @@ Hexagon = function(x, y, size){
 	this.contains = [];
 	this.specials = [];
 	this.lanes = [];
+	this.markers = [];
 	
 	this.create = function(){
 		this.points = [];
@@ -82,28 +83,36 @@ Hexagon = function(x, y, size){
 	this.create();
 	
 };
-	
-Hexagon.prototype.createHoverDiv = function(){
+
+Hexagon.prototype.createHoverDiv = function(pos){
 	var div = document.createElement("div");
-		div.id = "hoverDiv" + this.id;
 		div.className = "hoverDiv disabled";
-		
-		div.innerHTML = "<span> Sector: " + this.id + "</span>";
-		div.innerHTML += "<br>";
-		
-		div.innerHTML += "<span class='distance'></span>";
-		div.innerHTML += "<br>";
-		div.innerHTML += "<br>";
-		
-		for (var i = 0; i < this.contains.length; i++){
-			div.innerHTML += this.contains[i].constructor.name;
-			div.innerHTML += "<br>";
+
+		for (var i = 0; i < this.markers.length; i++){
+			div.innerHTML += "<span>" + this.markers[i].notes + "</span></br>";
 		}
-		
-	document.body.appendChild(div);			
+
+	document.body.appendChild(div);
+
+	this.hover = div;
+}
+
+Hexagon.prototype.showHoverDiv = function(pos){
+	this.hover.style.marginLeft = this.center.x + 30 + cam.offSet.x + "px";
+	this.hover.style.marginTop = this.center.y + 30 + cam.offSet.y + "px";
+	this.hover.className = "hoverDiv";
+
+	activeHover = this.id;
+}
+
+
+Hexagon.prototype.hideHoverDiv = function(){
+	this.hover.className = "hoverDiv disabled";
+	activeHover = false;
 }
 	
 Hexagon.prototype.draw = function(ctx){
+
 	if (this.selected){
 		ctx.strokeStyle = "red";
 		ctx.lineWidth = 1;
@@ -126,6 +135,7 @@ Hexagon.prototype.draw = function(ctx){
 		ctx.lineTo(p.x + cam.offSet.x, p.y + cam.offSet.y);
 	}
 	ctx.closePath();
+
 	
 	if (this.selected == 1){
 		ctx.fillStyle = "grey";
@@ -316,8 +326,13 @@ Hexagon.prototype.drawContent = function(ctx){
 		text += this.id[1];
 	}
 	
+	if (this.markers.length){
+		ctx.fillStyle = "red";
+	}
+	else {
+		ctx.fillStyle = "white";
+	}
 	
-	ctx.fillStyle = "white";
 	ctx.fillText(
 				text,
 				this.center.x + cam.offSet.x,

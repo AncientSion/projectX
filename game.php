@@ -76,14 +76,14 @@ if (isset($_SESSION["userid"])
 		
 		<div id="interface">
 			<div id="currentPos" style="color:red"></div>
-			<input type="button" value="Initialisieren" onclick="init()">
+	<!--		<input type="button" value="Initialisieren" onclick="init()">
 			<input type="form" id="sideLength" style="width: 50px; text-align: center" value="25">
 			<input type="form" id="zoom" style="width: 50px; text-align: center" value="1">
 			<input type="button" value="Hexfeld" onclick="switchCanvas('hex')">
 			<input type="button" value="Sprung" onclick="switchCanvas('jump')">
 			<input type="button" value="Bewegung" onclick="switchCanvas('move')">
 			<input type="button" value="Objekte" onclick="switchCanvas('obj')">
-			<input type="button" value="Mausreaktion" onclick="switchCanvas('mouse')">
+			<input type="button" value="Mausreaktion" onclick="switchCanvas('mouse')">    -->
 			<input type="button" value="Zug Beenden (todo)" onclick="endTurn()">
 			<input type="button" id="adminButton" value="Admin Modus (inaktiv)" onclick ="switchAdminMode()">
 			

@@ -243,8 +243,12 @@ function MovementManager(){
 			}
 		}
 
-		console.log(order);
+	//	console.log(order);
 		this.orders.push(order);
+
+		ajax.issueFleetMovement(order);
+
+
 		this.activeFleet = false;
 		selectedFleet = null;
 		

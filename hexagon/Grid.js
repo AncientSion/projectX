@@ -19,10 +19,6 @@ Grid = function(width, height){
 				this.hexes.push(hex);
 			}
 		}
-		
-	//	for (var i = 0; i < this.hexes.length; i++){
-		//	this.hexes[i].createHoverDiv();
-		//}
 	}
 	
 	

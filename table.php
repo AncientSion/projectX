@@ -147,9 +147,19 @@ $sql[] = "CREATE TABLE sectorspecials (
 			type VARCHAR (255)
 			)";
 
-			*/
 
 $sql[] = "ALTER TABLE jumplanes ADD gameid INT (3) AFTER id";
+			*/
+
+
+$sql[] = "CREATE TABLE markers (
+			id INT (3) AUTO_INCREMENT PRIMARY KEY,
+			gameid INT (3),
+			playerid INT (3),
+			x INT (3),
+			y INT (3),
+			notes VARCHAR (255)
+		)";
 
 	foreach ($sql as $query){
 		if (mysql_query($query, $connect)) {

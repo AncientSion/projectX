@@ -27,13 +27,14 @@ $(document).ready(function(){
 	mouseCanvas = document.getElementById("mouseCanvas");
 	mouseCtx = mouseCanvas.getContext("2d");
 		
+	$("#mouseCanvas").mousedown(function(e){e.preventDefault(); }, false);
+
 	$("#mouseCanvas").mousemove(mouseCanvasMouseMove);
 	$("#mouseCanvas").click(mouseCanvasClick);
+	$("#mouseCanvas").dblclick(mouseCanvasDblClick);
 	
 	$("#mouseCanvas").bind('mousewheel DOMMouseScroll', mouseCanvasZoom)
 	$("#mouseCanvas").bind('contextmenu', mouseCanvasScroll)
-	
-	document.getElementById("mouseCanvas").oncontextmenu = function(e){e.preventDefault()};
 
 });
 
@@ -49,7 +50,6 @@ var moveCtx;
 var mouseCanvas;
 var mouseCtx;
 var selectedHex = null;
-var enabledHover = null;
 var names = [];
 var selectedFleet = null;
 var moveManager;
@@ -62,6 +62,8 @@ var cam;
 var count = 0;
 var currentTurn
 var gamedata = {};
+var popup = false;
+var activeHover = false
 
 var userid;
 var gameid;
@@ -104,37 +106,8 @@ for (var i = 0; i < types.length; i++){
 		image.type = types[i];
 
 	special_icons.push(image);
-
-
-
 }
 
-
-function enableHoverDiv(hex, pos){
-	
-	var div = document.getElementById("hoverDiv" + hex.id);
-		div.className = "hoverDiv";
-		div.style.marginLeft = pos.x*zoom + 30 + "px";
-		div.style.marginTop = pos.y*zoom + 40 + "px";
-		
-	if (selectedHex){
-		var dist = grid.getHexDistance(selectedHex, hex);
-		if (dist > 0){
-			var span = document.getElementById("hoverDiv" + hex.id).getElementsByClassName("distance")[0];
-			span.innerHTML = "Distance: " + dist;
-		}
-	}
-		
-		
-	enabledHover = hex.id;
-}
-
-function disableHoverDiv(id){
-	var div = document.getElementById("hoverDiv" + id);
-		div.className = "hoverDiv disabled";
-		
-	enabledHover = null;
-}
 
 function updateGUI(hex){
 	var fleetFound = false;
@@ -233,7 +206,7 @@ function updateGUI(hex){
 			}
 
 			var table = document.createElement("table");
-				table.id = hex.contains[i].id + "planet";
+				table.id = "planet" + hex.contains[i].id;
 				table.className = "planetTable";	
 
 			var tr = document.createElement("tr");				
@@ -242,10 +215,14 @@ function updateGUI(hex){
 
 			if (hex.contains[i].name != "undefined"){
 				th.innerHTML = "Planet " + hex.contains[i].name + " (" + "id: " + hex.contains[i].id + ")";
-					
+				$(th).data("id", hex.contains[i].id);
+				th.addEventListener("contextmenu", function(e){
+					e.preventDefault();
+					createRenameElement(e, "planet", $(this).data("id"))
+				});
+
 				tr.appendChild(th);
 				table.appendChild(tr);
-
 
 				var tr = document.createElement("tr");
 					tr.style.height = "150px";
@@ -419,9 +396,13 @@ function updateGUI(hex){
 			var th = document.createElement("th");
 				th.colSpan = keys.length+1;
 				th.innerHTML = "Fleet: " + hex.contains[i].name + " (id: " + hex.contains[i].id + ")";
+				$(th).data("id", hex.contains[i].id);
+				th.addEventListener("contextmenu", function(e){
+					e.preventDefault();
+					createRenameElement(e, "fleet", $(this).data("id"));
+				})
 			tr.appendChild(th);
 			table.appendChild(tr);
-
 
 
 			var tr = document.createElement("tr");
@@ -438,23 +419,28 @@ function updateGUI(hex){
 						
 			for (var j = 0; j < hex.contains[i].ships.length; j++){
 				var tr = document.createElement("tr");
-					tr.addEventListener("contextmenu", function(e){
-						e.preventDefault();
-					//	console.log($(this).data());
-						if ( $(this).hasClass("shipSelected") ){
-							$(this).removeClass("shipSelected");
-							transfer.removeShip($(this).data());
-						}
-						else {
-							$(this).addClass("shipSelected");
-							transfer.addShip($(this).data());
-						}
-
-					//	console.log(transfer.selected);
-					});
 					$(tr).data("shipid", hex.contains[i].ships[j].id);
 					$(tr).data("fleetid", hex.contains[i].id);
 
+					tr.addEventListener("click", function(e){
+						e.stopPropagation();
+						if (! selectedFleet){
+						//	console.log($(this).data());
+							if ( $(this).hasClass("shipSelected") ){
+								$(this).removeClass("shipSelected");
+								transfer.removeShip($(this).data());
+							}
+							else {
+								$(this).addClass("shipSelected");
+								transfer.addShip($(this).data());
+							}
+						}
+					});
+					tr.addEventListener("contextmenu", function(e){
+						e.stopPropagation();
+						e.preventDefault();
+						createRenameElement(e, "ship", $(this).data("shipid"));
+					});
 
 
 				for (var l = 0; l < keys.length; l++){
@@ -740,5 +726,104 @@ function switchCanvas(id){
 function isEqual(a, b){
 	if (a[0] == b[0] && a[1] == b[1]){
 		return true;
+	}
+}
+
+
+function createRenameElement(e, type, id){
+
+	if (popup){
+		return;
+	}
+	else {
+
+		popup = true;
+
+		var div = document.createElement("table");
+			div.id = "renameDiv";
+			div.style.margin = "auto";
+
+		var span = document.createElement("span");
+			span.innerHTML = "Rename this " + type + " to:";
+			div.appendChild(span);
+
+		var input = document.createElement("input");
+			input.placeholder = "Enter New Name here";
+			$(input).data("id", id);
+			$(input).data("type", type);
+			div.appendChild(input);
+
+		var input = document.createElement("input");
+			input.type = "button";
+			input.style.width = "70px";
+			input.value = "Confirm";
+			input.addEventListener("click", function(e){
+				var input = this.parentNode.getElementsByTagName("input")[0];
+				var id = $(input).data("id");
+				var type = $(input).data("type");
+				var name = input.value;
+
+				if (name != ""){					
+					popup = false;
+
+					if (type == "planet"){
+						for (var i = 0; i < selectedHex.contains.length; i++){
+							if (selectedHex.contains[i].id == id) {
+								if (selectedHex.contains[i] instanceof Planet){
+									selectedHex.contains[i].name = name;
+									ajax.changeElementName(type, id, name);
+									break;
+								}
+							}
+						}
+					}
+					else if (type == "fleet"){
+						for (var i = 0; i < selectedHex.contains.length; i++){
+							if (selectedHex.contains[i].id == id) {
+								if (selectedHex.contains[i] instanceof Fleet){
+									selectedHex.contains[i].name = name;
+									ajax.changeElementName(type, id, name);
+									break;
+								}
+							}
+						}
+					}
+					else if (type == "ship"){
+						for (var i = 0; i < selectedHex.contains.length; i++){
+							if (selectedHex.contains[i] instanceof Fleet){
+								for (var j = 0; j < selectedHex.contains[i].ships.length; j++){
+									if (selectedHex.contains[i].ships[j].id == id){
+										selectedHex.contains[i].ships[j].name = name;
+										ajax.changeElementName(type, id, name);
+										break;
+									}
+								}
+							}
+						}
+					}
+
+
+				$("#renameDiv").remove();
+				updateGUI(selectedHex);
+
+				}
+				else {
+					alert("invalid name given");
+				}
+			});
+
+			div.appendChild(input);
+
+		var input = document.createElement("input");
+			input.type = "button";
+			input.style.width = "70px"
+			input.value = "Cancel";;
+			input.addEventListener("click", function(e){
+				popup = false;
+				$("#renameDiv").remove();
+			});
+			div.appendChild(input);
+
+			document.body.appendChild(div);
 	}
 }

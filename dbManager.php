@@ -743,39 +743,37 @@ class DBManager {
 	}
 
 
-	public function insertSubmoves($move){
-		Debug::log("insertSubmoves");
+	public function insertMoves($order){
+		Debug::log("DB insertMoves");
 
-		echo $move;
-
-		if (isset($move["cancel"])) {
-		//	Debug::log("cancel");
-			if ($this->deleteOldMoves($move["fleetId"])) {
+		if (isset($order["cancel"])) {
+			Debug::log("cancel");
+			if ($this->deleteOldMoves($order["fleetId"])) {
 				return true;
 			}
 			else {
 				return false;
 			}
 		}
-		else if ($this->deleteOldMoves($move["fleetId"])) {
+		else if ($this->deleteOldMoves($order["fleetId"])) {
+			Debug::log("sub");
 
-			for ($i = 0; $i < sizeof($move["moves"]); $i++) {
-		//		Debug::log("sub");
-				$subMove = $move["moves"][$i];
-
-				$stmt = $this->connection->prepare("
-					INSERT INTO moves
-						(fleetid, turn, step, x, y, hmp)
-					VALUES
-						(:fleetid, :turn, :step, :x, :y, :hmp)
+			$stmt = $this->connection->prepare("
+				INSERT INTO moves
+					(fleetid, turn, step, x, y, hmp)
+				VALUES
+					(:fleetid, :turn, :step, :x, :y, :hmp)
 					");
 
-				$stmt->bindParam(":fleetid", $move["fleetId"]);
-				$stmt->bindParam(":turn", $move["turn"]);
+			for ($i = 0; $i < sizeof($order["moves"]); $i++) {
+				$subMove = $order["moves"][$i];
+
+				$stmt->bindParam(":fleetid", $order["fleetId"]);
+				$stmt->bindParam(":turn", $order["turn"]);
 				$stmt->bindParam(":step", $i);
 				$stmt->bindParam(":x", $subMove[0]);
 				$stmt->bindParam(":y", $subMove[1]);
-				$stmt->bindParam(":hmp", $move["hmp"][$i]);
+				$stmt->bindParam(":hmp", $order["hmp"][$i]);
 				$stmt->execute();
 
 			}
@@ -810,6 +808,135 @@ class DBManager {
 		$stmt->execute();			
 		if ($stmt->errorCode() == 0){
 			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function changeName($obj){
+		$type = $obj["type"];
+		$gameid = $obj["gameid"];
+		$objectid = $obj["id"];
+		$newName = $obj["newName"];
+
+		if ($obj["type"] == "planet"){
+			return $this->changePlanetName($obj);
+		}
+		else if ($obj["type"] == "fleet"){
+			return $this->changeFleetName($obj);			
+		}
+		else if ($obj["type"] == "ship"){
+			return $this->changeShipName($obj);			
+		}
+
+	}
+
+
+	public function changePlanetName($obj){
+		$sql = "UPDATE planets SET name = '".$obj["newName"]."' WHERE gameid = ".$obj["gameid"]." AND id = ".$obj["id"];
+
+		if ($this->connection->query($sql)){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function changeFleetName($obj){
+		$sql = "UPDATE fleets SET name = '".$obj["newName"]."' WHERE gameid = ".$obj["gameid"]." AND id = ".$obj["id"];
+
+		if ($this->connection->query($sql)){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function changeShipName($obj){
+		$sql = "UPDATE ships SET name = '".$obj["newName"]."' WHERE id = ".$obj["id"];
+
+		if ($this->connection->query($sql)){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function shipTransfer($obj){
+		$gameid = $obj["gameid"];
+		$actions = $obj["items"];
+
+		$stmt = $this->connection->prepare("
+			UPDATE ships
+			SET
+				fleetid = :fleetid
+			WHERE 
+				id = :id
+		");
+
+		foreach ($actions as $act){
+			$stmt->bindParam(":fleetid", $act["to"]);
+			$stmt->bindParam(":id", $act["shipid"]);
+
+			$stmt->execute();		
+
+			if ($stmt->errorCode() == 0){
+				continue;
+			}
+			else {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function createMarker($obj){
+		$stmt = $this->connection->prepare("
+			INSERT INTO markers
+				(gameid, playerid, x, y, notes)
+			VALUES
+				(:gameid, :playerid, :x, :y, :notes)
+			");
+
+		$stmt->bindParam("gameid", $obj["gameid"]);
+		$stmt->bindParam("playerid", $obj["playerid"]);
+		$stmt->bindParam("x", $obj["loc"][0]);
+		$stmt->bindParam("y", $obj["loc"][1]);
+		$stmt->bindParam("notes", $obj["note"]);
+
+		$stmt->execute();		
+
+		if ($stmt->errorCode() == 0){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function getMarkers($playerid, $gameid){
+		$stmt = $this->connection->prepare("
+			SELECT x, y, notes FROM markers
+			WHERE 
+				playerid = :playerid
+			AND
+				gameid = :gameid
+			");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":playerid", $playerid);
+
+		$stmt->execute();
+				
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		if ($result){
+			return $result;
 		}
 		else {
 			return false;

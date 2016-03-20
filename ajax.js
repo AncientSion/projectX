@@ -94,6 +94,41 @@ window.ajax = {
 		ajax.getGameStatus(userid, gameid);
 		ajax.getSectors();
 		ajax.getPlanets();
+		ajax.getMarkers(userid, gameid);
+	},
+
+	getMarkers: function(userid, gameid){
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+				userid: userid,
+				gameid: gameid,
+				type: "markers"
+				},		
+			error: ajax.error,
+			success: ajax.parseMarkers,
+		});
+	},
+
+	parseMarkers: function(markers){
+		list = JSON.parse(markers);
+
+		if (list){		
+			for (var i = 0; i < list.length; i++){
+				var data = list[i];
+				
+				for (var j = 0; j < grid.hexes.length; j++){
+					if (data.x == grid.hexes[j].x && data.y == grid.hexes[j].y){
+						grid.hexes[j].markers.push(data);
+					//	console.log(grid.hexes[j].id);
+					//	console.log(grid.hexes[j].markers);
+						break;
+					}
+				}
+			}
+		}
 	},
 
 	getGameStatus: function(userid, gameid){		
@@ -140,7 +175,7 @@ window.ajax = {
 	postSectors: function(sectors){
 	
 		sectors = JSON.stringify(sectors);
-		console.log(sectors);
+	//	console.log(sectors);
 	
 		$.ajax({
 			type: "POST",
@@ -178,7 +213,7 @@ window.ajax = {
 				
 				for (var j = 0; j < grid.hexes.length; j++){
 					if (data.x == grid.hexes[j].x && data.y == grid.hexes[j].y){
-						grid.hexes[j].specials.push(list[i]);
+						grid.hexes[j].specials.push(data);
 
 						if (data.type == "Black Hole"){
 							icon = special_icons[0];
@@ -641,6 +676,8 @@ window.ajax = {
 
 	commitMoves: function(moves){
 
+		console.log("commitMoves")
+
 		newMoves = [];
 
 		for (var i = 0; i < moves.length; i++){
@@ -665,6 +702,27 @@ window.ajax = {
 	},
 
 
+	issueFleetMovement: function(order){
+		console.log("issueFleetMovement")
+
+		if (order.turn == currentTurn){
+			order = JSON.stringify(order);
+
+			$.ajax({
+				type: "POST",
+				url: "postGameData.php",
+				datatype: "json",
+				data: {moveOrder: order},	
+				error: ajax.error,
+			success: ajax.echoReturn
+			});
+		}
+		else {
+			console.log("no moves");
+		}
+	},
+
+
 	endTurn: function(){
 
 		$.ajax({
@@ -675,6 +733,59 @@ window.ajax = {
 			error: ajax.error,
 			success: ajax.echoReturn
 		});		
+	},
+
+	changeElementName: function(type, id, newName){
+
+		var obj = {};
+			obj.gameid = gameid;
+			obj.type = type;
+			obj.id = id;
+			obj.newName = newName;
+
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {nameChange: obj},
+			error: ajax.error,
+			success: ajax.echoReturn
+		});
+	},
+
+	shipTransfer: function(items){
+		var obj = {
+			items: items,
+			gameid: gameid
+		}
+
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {shipTransfer: obj},
+			error: ajax.error,
+			success: ajax.echoReturn
+		})
+	},
+
+	createMarker: function(note, loc){
+
+		var obj = {
+			gameid: gameid,
+			playerid: userid,
+			note: note,
+			loc: loc
+		}
+
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {createMarker: obj},
+			error: ajax.error,
+			success: ajax.echoReturn
+		})
 	}
 }
 

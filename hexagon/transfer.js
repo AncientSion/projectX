@@ -171,7 +171,7 @@ function Transfer(){
 						for (var k = 0; k < this.shipActions.length; k++){
 							if (this.ships[j].id == this.shipActions[k].shipid){
 								this.shipActions[k].to = this.targetFleet;
-								replaced = true;;
+								replaced = true;
 							}
 						}
 						if (! replaced){
@@ -183,16 +183,26 @@ function Transfer(){
 
 							this.shipActions.push(item);
 						}
-
 						
 						selectedHex.contains[i].ships.push(this.ships[j]);
-
-
 					}
 				}
 			}
 		}
 
+		var validActions = [];
+
+		for (var i = 0; i < this.shipActions.length; i++){
+			var act = this.shipActions[i];
+			if (act.from != act.to){
+				validActions.push(act)
+			}
+		}
+
+
+		ajax.shipTransfer(validActions);
+
+		this.shipActions = [];
 		this.selected = [];
 		this.ships = [];
 		this.targetFleet = null;

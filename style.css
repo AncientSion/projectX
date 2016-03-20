@@ -1,3 +1,7 @@
+input {
+	width: auto;
+}
+
 .popup {
 	color: red;
 	background-color: black;
@@ -133,8 +137,9 @@ div {
 	display: inline-block;
 	background-color: red;
 	position: absolute;
-	z-index: 6;
-	width: 80px;
+	z-index: 9;
+	font-size: 12px;
+	width: 100px;
 	text-align: center;
 }
 
@@ -166,6 +171,20 @@ div {
 	width: 90%;
 	margin: auto;
 	margin-top: 20px;
+}
+
+#renameDiv {
+	position: absolute;
+	background-color: black;
+	z-index: 10;
+}
+
+#markerCreationDiv {
+	position: relative;
+	display: inline-block;
+	background-color: black;
+	z-index: 10;
+	border: 3px solid red;
 }
 
 #sectorCreationDiv {

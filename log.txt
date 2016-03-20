@@ -1,13 +1,106 @@
-get game: 1
-get game: 1
 getSectors
 user1
 game1
 result
-get game: 1
-get game: 1
-get game: 1
 lanes: 1
-get game: 1
-get game: 1
-get game: 1
+endTurnForPlayerInGame
+getSectors
+user1
+game1
+result
+lanes: 1
+getSectors
+user1
+game1
+result
+lanes: 1
+getSectors
+user1
+game1
+result
+lanes: 1
+getSectors
+user1
+game1
+result
+lanes: 1
+getSectors
+user1
+game1
+result
+lanes: 1
+getSectors
+user1
+game1
+result
+lanes: 1
+MOVES
+insertMoves
+DB insertMoves
+deleteOldMoves
+error 0
+sub
+getSectors
+user1
+game1
+result
+lanes: 1
+MOVES
+insertMoves
+DB insertMoves
+deleteOldMoves
+error 0
+sub
+getSectors
+user1
+game1
+result
+lanes: 1
+MOVES
+insertMoves
+DB insertMoves
+deleteOldMoves
+error 0
+sub
+moves success
+getSectors
+user1
+game1
+result
+lanes: 1
+MOVES
+insertMoves
+DB insertMoves
+deleteOldMoves
+error 0
+sub
+moves success
+getSectors
+user1
+game1
+result
+lanes: 1
+MOVES
+insertMoves
+DB insertMoves
+deleteOldMoves
+error 0
+sub
+moves success
+getSectors
+user1
+game1
+result
+lanes: 1
+MOVES
+insertMoves
+DB insertMoves
+cancel
+deleteOldMoves
+error 0
+moves success
+getSectors
+user1
+game1
+result
+lanes: 1

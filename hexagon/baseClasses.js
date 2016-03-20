@@ -86,7 +86,7 @@ function Ship(id, fleetid, size, model, name, elint, scanner, jumpdrive, notes){
 	this.jumpdrive = jumpdrive;
 	this.notes = notes;
 
-	console.log(this);
+	//console.log(this);
 }
 
 function Jumpgate(id, owner, location, damaged, usable){
