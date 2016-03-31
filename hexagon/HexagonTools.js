@@ -36,7 +36,6 @@ Hexagon = function(x, y, size){
 	this.validForMove = false;
 	this.contains = [];
 	this.specials = [];
-	this.lanes = [];
 	this.markers = [];
 	
 	this.create = function(){
@@ -347,32 +346,34 @@ Hexagon.prototype.drawLanes = function(ctx){
 	ctx.clearRect(0, 0, width, height);
 		
 	if (this.hasJumpgate){
-		for (var i = 0; i < this.lanes.length; i++){
-			
-			ctx.beginPath();
-			ctx.moveTo(
-					this.center.x + cam.offSet.x,
-					this.center.y + cam.offSet.y
-					);
-					
-				//	console.log( (this.center.x + cam.offSet.x) + " / " + (this.center.y + cam.offSet.y) );
-					
-			
-			for (var j = 1; j < this.lanes[i].path.length; j++){
-				var hex = grid.getHexById(this.lanes[i].path[j]);
-				
-					ctx.lineTo(
-						hex.center.x + cam.offSet.x,
-						hex.center.y + cam.offSet.y
-					);
-					
-				//	console.log( (hex.center.x + cam.offSet.x) + " / " + (hex.center.y + cam.offSet.y) );
 
+		for (var i = 0; i < this.contains.length; i++){
+			if (this.contains[i] instanceof Jumpgate){
+				ctx.beginPath();
+				ctx.moveTo(
+						this.center.x + cam.offSet.x,
+						this.center.y + cam.offSet.y
+						);
+						
+					//	console.log( (this.center.x + cam.offSet.x) + " / " + (this.center.y + cam.offSet.y) );
+						
+				
+				for (var j = 1; j < this.contains[i].lane.path.length; j++){
+					var hex = grid.getHexById(this.contains[i].lane.path[j]);
+					
+						ctx.lineTo(
+							hex.center.x + cam.offSet.x,
+							hex.center.y + cam.offSet.y
+						);
+						
+					//	console.log( (hex.center.x + cam.offSet.x) + " / " + (hex.center.y + cam.offSet.y) );
+
+				}
+				
+				ctx.lineWidth = 3 * cam.zoom;
+				ctx.strokeStyle = "darkcyan";
+				ctx.stroke();
 			}
-			
-			ctx.lineWidth = 3 * cam.zoom;
-			ctx.strokeStyle = "darkcyan";
-			ctx.stroke();
 		}
 	}
 }

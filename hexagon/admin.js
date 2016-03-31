@@ -5,6 +5,7 @@ function Admin(){
 	this.fleets = [];
 	this.gates = [];
 	this.sectorSpecials = [];
+	this.gateLaneItems = []
 	this.currentLane = false;
 	this.active = false;
 	this.inLaneMode = false;
@@ -255,6 +256,8 @@ function Admin(){
 		var div = document.getElementById("gateCreationDiv");
 		var inputs = div.getElementsByTagName("input");
 
+		var item = {}
+
 		var gate = {
 			gameid: gameid,
 			damage: 0,
@@ -262,7 +265,7 @@ function Admin(){
 			owner: Math.floor(inputs[0].value),
 			loc: this.currentLane[0]
 		}
-		this.gates.push(gate);
+			item.startGate = gate;
 
 		var gate = {
 			gameid: gameid,
@@ -271,11 +274,14 @@ function Admin(){
 			owner: Math.floor(inputs[1].value),
 			loc: this.currentLane[this.currentLane.length-1]
 		}
-		this.gates.push(gate);
+			item.endGate = gate;
 
-		this.lanes.push(this.currentLane);
+			item.lane = this.currentLane
+
 
 		this.currentLane = [];
+
+		this.gateLaneItems.push(item);
 
 		var div = document.getElementById("gateCreationDiv");
 			div.parentNode.removeChild(div);
@@ -297,7 +303,7 @@ function Admin(){
 		document.getElementById("stopLaneMode").className = "disabled";
 		document.getElementById("startLaneMode").className = "";
 
-		if (this.lanes.length > 0){
+		if (this.gateLaneItems.length > 0){
 			document.getElementById("confirmLaneButton").className = "";
 		}
 	},
@@ -324,10 +330,9 @@ function Admin(){
 	}
 	
 	this.commitLanes = function(){
-		if (this.lanes.length > 0){
-			ajax.postLanes(this.lanes, this.gates);
-			this.lanes = [];
-			this.gates = [];
+		if (this.gateLaneItems.length > 0){
+			ajax.postGateAndLane(this.gateLaneItems);
+		//	this.gateLaneItems = [];
 		}
 		else {
 			alert("no lanes in queue");
@@ -890,11 +895,22 @@ function Admin(){
 		}
 	},
 
-
-
-	this.startGates = function(){
-		this.inGateMode = true;
+	this.switchGateMode = function(){
+		if (! this.inGateMode){
+			this.inGateMode = true;
+			$("#createGateButton").show();
+			$("#destroyGateButton").show();
+		}
+		else {
+			this.inGateMode = false;
+			$("#createGateButton").hide();
+			$("#destroyGateButton").hide()
+		}
 	},
+
+	this.createGate = function(){
+		this.createGateMode = true;
+	}
 
 	this.showGateCreation = function(hex){
 		this.activePopUp = true;
@@ -950,7 +966,7 @@ function Admin(){
 				var input = document.createElement("input");
 					input.type = "button";
 					input.value = "confirm";
-					input.onclick = function(){admin.createGate()};
+					input.onclick = function(){admin.doCreateGate()};
 					input.style.width = "80px";
 					input.style.margin = "auto";
 					input.style.display = "inline";
@@ -977,7 +993,7 @@ function Admin(){
 		document.body.appendChild(topDiv);
 	},
 
-	this.createGate = function(){
+	this.doCreateGate = function(){
 		var table = document.getElementById("gateCreationTable");
 		var loc = $(table).data("loc");
 		var owner = Math.floor(document.getElementById("createGateOwner").value);
@@ -1006,7 +1022,6 @@ function Admin(){
 			div.parentNode.removeChild(div);
 		
 		if (this.gates.length > 0){
-			document.getElementById("logGatesButton").className = "";
 			document.getElementById("confirmGateButton").className = "";
 		}
 	},
@@ -1018,20 +1033,77 @@ function Admin(){
 	},
 
 	this.destroyGate = function(hex){
-		if (this.killGateMode = false){
+		if (! this.killGateMode){
 			this.killGateMode = true;
 		}
 		else {
-			this.gillGateMode = false;
+			this.killGateMode = false;
 		}
 	},
 
 	this.showGateSelect = function(hex){
+
+		var gates = [];
+		var tds = [];
+
 		for (var i = 0; i < hex.contains.length; i++){
 			if (hex.contains[i] instanceof Jumpgate){
-				console.log(hex.contains[i]);
+				gates.push(hex.contains[i]);
 			}
 		}
+
+
+		var th = document.createElement("th");
+			th.innerHTML = "Select which Jumpgate to kill:";
+			tds.push(th);
+
+
+		for (var i = 0; i < gates.length; i++){
+			var td = document.createElement("td");
+				td.innerHTML = "Jumpgate ID: " + gates[i].id;
+				$(td).data("id", gates[i].id);
+				td.addEventListener("click", function(){
+					if ($(this).hasClass("gateSelected")){
+						$(this).removeClass("gateSelected");
+					}
+					else {
+						$(this).addClass("gateSelected");
+					}
+				});
+				tds.push(td);
+		}
+
+		var table = document.createElement("table");
+			table.id = "gateKillDiv";
+
+		for (var i = 0; i < tds.length; i++){
+			var tr = document.createElement("tr");
+				tr.appendChild(tds[i]);
+			table.appendChild(tr);
+		}
+
+		var tr = document.createElement("tr");
+			tr.innerHTML = "<td><input type='button' value='confirm' onclick='admin.killGate()'</input></td>";
+		table.appendChild(tr);
+
+		document.body.appendChild(table);
+	},
+
+	this.killGate = function(){
+		var div = document.getElementById("gateKillDiv");
+		var rows = div.getElementsByTagName("td");
+		var gates = [];
+
+		for (var i = 0; i < rows.length; i++){
+			if (rows[i].className == "gateSelected"){
+				gates.push($(rows[i]).data("id"));
+			}
+		}
+
+		$(div).remove();
+
+		ajax.killGates(gates);
+
 	},
 
 
@@ -1045,7 +1117,7 @@ function Admin(){
 		console.log("commit");
 		if (this.gates.length > 0){
 			ajax.postGates(this.gates);
-		//	this.gates = [];
+			this.gates = [];
 		}
 		else {
 			alert("no gates in queue");

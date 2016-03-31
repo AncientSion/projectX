@@ -102,10 +102,10 @@ if (isset($_SESSION["userid"])
 			</div>
 
 			<div id="adminGates" class="disabled">
-				<input type="button" id="" value="Place JumpGate" onclick ="admin.startGates()">
-				<input type="button" id="" value="Destroy JumpGate" onclick ="admin.destroyGate()">
-				<input type="button" id="logGatesButton" value="log JumpGates" class="disabled" onclick ="admin.logGates()">
-				<input type="button" id="confirmGateButton" value="COMMIT GATES" class="disabled" onclick="admin.commitGates()">
+				<input type="button" id="" value="Gate Mode" onclick ="admin.switchGateMode()">
+				<input type="button" id="createGateButton" class="disabled" value="Place JumpGate" onclick ="admin.createGate()">
+				<input type="button" id="destroyGateButton" class="disabled"  value="Destroy JumpGate" onclick ="admin.destroyGate()">
+				<input type="button" id="confirmGateButton"  class="disabled" value="COMMIT GATES" class="disabled" onclick="admin.commitGates()">
 			</div>
 			
 			<div id="adminLanes" class="disabled">

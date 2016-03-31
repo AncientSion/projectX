@@ -96,6 +96,7 @@ function Jumpgate(id, owner, location, damaged, usable){
 	this.location = location;
 	this.damaged = damaged;
 	this.usable = usable;
+	this.lane;
 }
 
 function Lane(){

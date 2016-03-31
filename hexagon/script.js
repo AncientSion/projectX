@@ -111,7 +111,6 @@ for (var i = 0; i < types.length; i++){
 
 function updateGUI(hex){
 	var fleetFound = false;
-	var gateFound = false;
 
 	var div = document.getElementById("gui");
 		div.innerHTML = "";
@@ -141,50 +140,48 @@ function updateGUI(hex){
 		
 	for (var i = 0; i < hex.contains.length; i++){
 
-		if (hex.contains[i] instanceof Jumpgate){			
-			if (!gateFound){
-				gateFound = true;
-				var table = document.createElement("table");
-					table.id = hex.contains[i].id + "jumpgate";
-					table.className = "jumpgateTable";
-					
-				var tr = document.createElement("tr");				
-					var th = document.createElement("th");
-						th.colSpan = 2;
-						th.innerHTML = "Jumpgate" + "(id: " + hex.contains[i].id + ")";
-					tr.appendChild(th);
-				table.appendChild(tr);
-					
-				var tr = document.createElement("tr");
-					tr.className = "centerText" 
-					tr.innerHTML = "<td>Connected to:</td>";
-					
-				table.appendChild(tr);					
+		if (hex.contains[i] instanceof Jumpgate){
+
+			var target = hex.contains[i].lane.path[hex.contains[i].lane.path.length-1];
+
+			var table = document.createElement("table");
+				table.id = hex.contains[i].id + "jumpgate";
+				table.className = "jumpgateTable";
+
+				$(table).data("targetX", target[0]);
+				$(table).data("targetY", target[1]);
+				table.addEventListener("mouseenter", function(){
+					var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
+						goal.checkHighlight();
+				});
 				
-				for (var j = 0; j < hex.lanes.length; j++){
-					var target = hex.lanes[j].target[0] + ", " + hex.lanes[j].target[1];
-					
-					var tr = document.createElement("tr");
-						$(tr).data("targetX", hex.lanes[j].target[0]);
-						$(tr).data("targetY", hex.lanes[j].target[1]);
-						tr.addEventListener("mouseenter", function(){
-							var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
-								goal.checkHighlight();
-						});
-						
-						tr.addEventListener("mouseleave", function(){
-							var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
-								goal.checkHighlight();
-						});
-						
-						tr.className = "centerText";
-						tr.innerHTML = "<td>" + target + " (id: " + hex.lanes[j].id + ")</td>";
-						
-						table.appendChild(tr);
-				}
-			}
+				table.addEventListener("mouseleave", function(){
+					var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
+						goal.checkHighlight();
+				});	
+				
+				var tr = document.createElement("tr");
+
+					var th = document.createElement("th");				
+						th.innerHTML = "Jumpgate" + " #" + hex.contains[i].id;
+					tr.appendChild(th);				
+								
+					var th = document.createElement("th");	
+						th.className = "centerText" 
+						th.innerHTML = "<td>connected to:</td>";
+					tr.appendChild(th);				
+				
+					var th = document.createElement("th");
+				//		th.innerHTML = "<td>" + target + " (id: " + lane.id + ")</td>";
+						th.innerHTML = "<td>" + target + "</td>";
+			
+					tr.appendChild(th);
+
+				table.appendChild(tr)	
+
 		}
-		if (hex.contains[i] instanceof Planet){
+		
+		else if (hex.contains[i] instanceof Planet){
 
 			var icon = hex.contains[i].icon;
 			var type = hex.contains[i].type;
@@ -382,7 +379,7 @@ function updateGUI(hex){
 				}
 			}	
 		}
-		if (hex.contains[i] instanceof Fleet){
+		else if (hex.contains[i] instanceof Fleet){
 			fleetFound = true;
 			var keys = ["size", "model", "name", "elint", "scanner", "jumpdrive"];
 

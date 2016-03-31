@@ -6,10 +6,10 @@ function MovementManager(){
 	this.adjacent = [];
 	this.orders = [];
 	this.origin;
-	this.currentLane = false;
 	this.onLane = false;
-	this.currentNode;
 	this.requiredHMP = [];
+	this.possibleLanes = [];
+	this.steps = 0;
 	
 	this.setAdjacent = function(){
 		for (var i = 0; i < this.adjacent.length; i++){
@@ -29,10 +29,11 @@ function MovementManager(){
 	
 	this.initiateMovement = function(){
 		this.activeFleet = selectedFleet;
+		this.steps = 0;
 		this.currentHex = selectedHex;
 		this.adjacent = this.currentHex.getAdjacent();
 		this.chosenMoves = [];
-		this.currentLane = false;
+		this.possibleLanes = [];
 		this.onLane = false;
 		this.requiredHMP = [];
 		this.origin = selectedHex;
@@ -41,83 +42,112 @@ function MovementManager(){
 		this.setAdjacent();
 		
 	}
-	
-	this.pickMovement = function(hex, type){
-		if (this.onLane){
-			this.requiredHMP.push(1);
-		}
-		else {
-			this.requiredHMP.push(3);
-		}
 		
-		this.drawSingleMovement(hex);
-		this.chosenMoves.push(hex);
-		console.log(this.chosenMoves);
-		
-		this.currentHex = hex;
-		
-		this.continuePathing();
-	}
-	
-	this.continuePathing = function(){
-		this.unsetAdjacent();
-		this.adjacent = this.currentHex.getAdjacent();
-		this.setAdjacent();
-	}
-	
 	this.checkForValidMove = function(hex){
+		console.log("checkForValidMove");
 		if (hex.validForMove){
 			if (this.currentHex.hasJumpgate){
-				this.currentNode = this.currentHex;
-				this.currentLane = this.getLane(hex);
-				if (this.currentLane){
-					this.onLane = true;
-				//	console.log("jump onlane");
-					this.pickMovement(hex);
-				}
-				else {
-					this.onLane = false;
-				//	console.log("jump no lane");
-					this.pickMovement(hex);
-				}
-			}
-			else if (this.onLane){
-				for (var i = 0; i < this.currentLane.path.length; i++){
-					if (isEqual(this.currentHex.id, this.currentLane.path[i])){
-						var index = i;
+				this.getPossibleLanes(hex);
+
+				if (this.possibleLanes.length){
+
+					var onLane = false;
+
+					for (var i = 0; i < this.possibleLanes.length; i++){
+						if (isEqual(this.possibleLanes[i].path[1], hex.id)){
+							this.onLane = true;
+							onLane = true;
+							this.steps = 0;
+							console.log("jumping onto lane");
+						}
+					}
+
+					if (! onLane){
+						this.onLane = false;
 					}
 				}
-				
-				if (isEqual(this.currentLane.path[index+1], hex.id)){
-				//	console.log("onlane");
-					this.pickMovement(hex);
-				}
 				else {
-				//	console.log("leftlane");
 					this.onLane = false;
-					this.currentLanse = false;
-					this.pickMovement(hex);
+					console.log("move off lane");
 				}
+
+
+				this.pickMovement(hex);
+			}
+			else if (this.possibleLanes.length){
+				console.log("else if")
+
+				var newValidLanes = [];
+
+				for (var i = 0; i < this.possibleLanes.length; i++){
+					if (isEqual(this.possibleLanes[i].path[this.steps+1], hex.id)){
+						console.log("on lane true");
+						this.onLane = true;
+						newValidLanes.push(this.possibleLanes[i]);
+					}
+				}
+
+				this.possibleLanes = newValidLanes
+					console.log(this.possibleLanes);
+
+				if (! this.possibleLanes.length){
+					console.log("empty up");
+					this.onLane = false;
+					this.possibleLanes = [];
+				}
+
+				this.pickMovement(hex);
 			}
 			else {
-				//	console.log("free space");
+				//console.log("else")
+				this.onLane = false;;
 				this.pickMovement(hex);
 			}
 		}
 	}
 	
 	
-	this.getLane = function(hex){
-		for (var i = 0; i < this.currentNode.lanes.length; i++){
-			if (isEqual(hex.id, this.currentNode.lanes[i].path[1])){
-				return this.currentNode.lanes[i];
+	this.getPossibleLanes = function(hex){
+		console.log("getPossibleLanes");
+
+		for (var i = 0; i < this.currentHex.contains.length; i++){
+			if (this.currentHex.contains[i] instanceof Jumpgate){
+				if (isEqual(hex.id, this.currentHex.contains[i].lane.path[1])){
+					this.possibleLanes.push(this.currentHex.contains[i].lane);
+				}
 			}
 		}
-		return false;
 	}
 	
+	this.pickMovement = function(hex, type){
+		console.log("pickMovement");
+
+		this.steps++;
+
+		if (this.onLane){
+		console.log("moving on Lane");
+			this.requiredHMP.push(1);
+		}
+		else {
+		console.log("moving off Lane");
+			this.requiredHMP.push(3);
+		}
+		
+		this.drawSingleMovement(hex);
+		this.chosenMoves.push(hex);		
+		this.currentHex = hex;		
+		this.continuePathing();
+	}
 	
+	this.continuePathing = function(){
+		console.log("continuePathing");
+		this.unsetAdjacent();
+		this.adjacent = this.currentHex.getAdjacent();
+		this.setAdjacent();
+	}
+
 	this.checkMovementType = function(hex){
+		console.log("checkMovementType");
 		if (this.origin.hasJumpgate){
 			if (this.travelsAlongJumpLane(hex)){
 				return "lane";
@@ -128,6 +158,7 @@ function MovementManager(){
 	}
 	
 	this.travelsAlongJumpLane = function(hex){
+		console.log("ding");
 		var steps = this.chosenMoves.length;
 		
 		for (var i = 0; i < this.origin.lanes.length-1; i++){
@@ -135,10 +166,12 @@ function MovementManager(){
 				console.log("on lane");
 				return false
 			}
-			else console.log("on lane");
+			else console.log("off lane");
 		}
 			return true;
 	}
+
+
 	
 	this.checkForOrderUndraw = function(){
 		var redraw = false;

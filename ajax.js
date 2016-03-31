@@ -316,32 +316,79 @@ window.ajax = {
 
 
 	postGates: function(gates){
-		gates = JSON.stringify(gates);
-	
+		var item = {
+			gameid: gameid,
+			gates: gates,
+			type: "create"
+		};
+
+		item = JSON.stringify(item);
+
+		console.log(item);
+
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
 			datatype: "json",
-			data: {gates: gates},	
+			data: {gates: item},	
 			error: ajax.error,
 			success: ajax.success,
 		});
 	},
 
+	killGates: function(id){
+		var item = {
+			gameid: gameid,
+			ids: id,
+			type: "destroy"
+		};
+
+		item = JSON.stringify(item);
+
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {gates: item},
+			error: ajax.error,
+			success: ajax.echoReturn
+		})
+	},
+
+	postGateAndLane: function(items){
+		items = JSON.stringify(items);
+
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {
+				gateLaneItem: items,
+			},	
+			error: ajax.error,
+			success: ajax.echoReturn
+		});		
+	},
+
 	postLanes: function(lanes, gates){
-		console.log("lanes");
+	//	console.log(lanes)
+	//	console.log(gates)
 		lanes = JSON.stringify(lanes);
+		gates = JSON.stringify(lanes);
 	
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
 			datatype: "json",
-			data: {lanes: lanes},	
+			data: {
+				gates: gates,
+				lanes: lanes
+			},	
 			error: ajax.error,
-			success: function(){
-				ajax.postGates(gates);
-			}
+			success: ajax.echoReturn
 		});
+		
+
 	},
 
 	getGates: function(){
@@ -355,50 +402,11 @@ window.ajax = {
 				type: "gates"
 				},		
 			error: ajax.error,
-			success: ajax.parseGates,
+			success: ajax.getLanes,
 		});
 	},
 
-	parseGates: function(list){
-		list = JSON.parse(list);
-
-	//	console.log(list);
-
-		var gates = [];
-		if (list){
-			for (var i = 0; i < list.length; i++){
-				var gate = new Jumpgate(
-					list[i].id,
-					list[i].owner,
-					[list[i].x, list[i].y],
-					0, 
-					1
-					)
-				
-				gates.push(gate);
-			}
-		}
-
-	//	console.log(gates);
-
-		for (var i = 0; i < gates.length; i++){
-		//	console.log(gates[i].location);
-			for (var j = 0; j < grid.hexes.length; j++){
-				if (isEqual (gates[i].location, grid.hexes[j].id) ) {
-				//	console.log(grid.hexes[j].id);
-					grid.hexes[j].hasJumpgate = true;
-					grid.hexes[j].contains.push(gates[i]);
-					break;
-				}
-			}
-		}
-
-
-
-		ajax.getLanes();
-	},
-
-	getLanes: function(){	
+	getLanes: function(gates){
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
@@ -409,31 +417,55 @@ window.ajax = {
 				type: "lanes"
 				},		
 			error: ajax.error,
-			success: ajax.parseLanes,
+			success: function(lanes){
+				ajax.createGatesAndLanes(lanes, gates);
+			}
 		});
 	},
-	
-	parseLanes: function(list){
-		list = JSON.parse(list);
+
+	createGatesAndLanes: function(lanes, gates){
+		var realGates = [];
+		var realLanes = [];
+		var list;
 
 
-		if (list){			
-			var lanes = [];
-			
+		list = JSON.parse(gates);
+		if (list){
+			for (var i = 0; i < list.length; i++){
+				var gate = new Jumpgate(
+					list[i].id,
+					list[i].owner,
+					[list[i].x, list[i].y],
+					0, 
+					1
+					)
+				
+				realGates.push(gate);
+			}
+		}
+
+
+		list = JSON.parse(lanes);
+		if (list){					
 			for (var i = 0; i < list.length; i++){
 				var data = list[i];
 				
-			//	console.log(data);
 				
 				var lane = new Lane();
 				var location = [];
-				
+
 				for (var j in data){
 					if (j == "id"){
 						lane.id = data[j];
 					}
 					else if (j == "gameid"){
 						continue;
+					}
+					else if (j == "startGate"){
+						lane.startGate = data[j];
+					}
+					else if (j == "endGate"){
+						lane.endGate = data[j];						
 					}
 					else if (data[j] == null){
 					//	console.log("break");			
@@ -451,34 +483,53 @@ window.ajax = {
 					}
 				}
 				
-				lane.target = lane.path[lane.path.length-1];
-				
-				lanes.push(lane);
+				realLanes.push(lane);
 			}
-			
-			
-			for (var i = 0; i < lanes.length; i++){
-				for (var j = 0; j < grid.hexes.length; j++){
-					if ( isEqual(lanes[i].path[0], grid.hexes[j].id) ){
-							grid.hexes[j].lanes.push(lanes[i]);
-					}
-					else if ( isEqual(lanes[i].path[lanes[i].path.length-1], grid.hexes[j].id) ){
-						var newLane = new Lane();
-							newLane.id = lanes[i].id;
-							newLane.target = lanes[i].path[0];
-							
-						for (var k = lanes[i].path.length-1; k >= 0; k--){
-							newLane.path.push(lanes[i].path[k]);
-						}
+		}
 
-						grid.hexes[j].lanes.push(newLane);					
+		var finished = [];
+
+
+		for (var i = 0; i < realLanes.length; i++){
+			for (var j = 0; j < realGates.length; j++){
+				if (realGates[j].id == realLanes[i].startGate){
+					realGates[j].lane = realLanes[i];	
+				}
+				else if (realGates[j].id == realLanes[i].endGate){
+					var lane = new Lane();
+						lane.id = realLanes[i].id;
+						lane.copy = true;
+						lane.startGate = realLanes[i].endGate;
+						lane.endGate = realLanes[i].startGate;
+						lane.path = [];
+
+					for (var k = realLanes[i].path.length-1; k >= 0; k--){
+						lane.path.push(realLanes[i].path[k]);
 					}
+
+					realGates[j].lane = lane;
 				}
 			}
 		}
 
-		ajax.getFleets()
 
+		ajax.parseGates(realGates);
+		ajax.getFleets();
+
+
+	},
+
+	parseGates: function(gates){
+
+		for (var i = 0; i < gates.length; i++){
+			for (var j = 0; j < grid.hexes.length; j++){
+				if (isEqual (gates[i].location, grid.hexes[j].id) ) {
+					grid.hexes[j].hasJumpgate = true;
+					grid.hexes[j].contains.push(gates[i]);
+					break;
+				}
+			}
+		}
 	},
 
 	postFleets: function(fleets){		
@@ -775,14 +826,36 @@ window.ajax = {
 			gameid: gameid,
 			playerid: userid,
 			note: note,
-			loc: loc
+			loc: loc,
+			type: "create"
 		}
+
+		obj = JSON.stringify(obj);
 
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
 			datatype: "json",
-			data: {createMarker: obj},
+			data: {marker: obj},
+			error: ajax.error,
+			success: ajax.echoReturn
+		})
+	},
+
+	deleteMarker: function(ele){
+
+		var obj = {
+			id: Math.floor(ele.parentNode.getElementsByTagName("span")[0].innerHTML),
+			type: "delete"
+		}
+
+		obj = JSON.stringify(obj);
+
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {marker: obj},
 			error: ajax.error,
 			success: ajax.echoReturn
 		})

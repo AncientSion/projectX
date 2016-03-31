@@ -59,7 +59,6 @@ function mouseCanvasMouseMove(e){
 
 function mouseCanvasDblClick(e){
 	e.stopPropagation();
-	console.log("ding")
 	if (popup){
 		return;
 	}
@@ -82,25 +81,32 @@ function mouseCanvasDblClick(e){
 			content.push("Add Global Map Marker");
 			content.push("Hex: " + hex.id);
 			content.push("<input placeholder='Enter Notes Here'>");
-			content.push("<input type='button' value='confirm' onclick='createMarker(this.parentNode.parentNode.parentNode.parentNode)'>");
-			content.push("<input type='button' value='cancel' onclick='cancelMarker(this.parentNode.parentNode.parentNode.parentNode)'>");
-
-
-			for (var i = 0; i < content.length; i++){
-				var tr = document.createElement("tr");
-				var td = document.createElement("td");
-					td.innerHTML = content[i];
-
-				tr.appendChild(td);
-				table.appendChild(tr);
-			}
-
-			var input = table.getElementsByTagName("input")[0];
-				$(input).data("loc", hex.id);
-
-			div.appendChild(table);
-			document.body.appendChild(div);
+			content.push("<input type='button' value='confirm' onclick='createMarker(this.parentNode.parentNode.parentNode.parentNode)'><input type='button' value='cancel' onclick='cancelMarker(this.parentNode.parentNode.parentNode.parentNode)'>");
 		}
+
+		if (hex.markers.length){
+			for (var i = 0; i < hex.markers.length; i++){
+				content.push("<span>" + hex.markers[i].id + "</span>:  " + hex.markers[i].notes + "      <input type='button' value='delete' onclick='ajax.deleteMarker(this)'></input>");
+			}
+		}
+
+
+
+
+		for (var i = 0; i < content.length; i++){
+			var tr = document.createElement("tr");
+			var td = document.createElement("td");
+				td.innerHTML = content[i];
+
+			tr.appendChild(td);
+			table.appendChild(tr);
+		}
+
+		var input = table.getElementsByTagName("input")[0];
+			$(input).data("loc", hex.id);
+
+		div.appendChild(table);
+		document.body.appendChild(div);
 	}
 }
 
@@ -164,7 +170,7 @@ function mouseCanvasClick(e){
 						if (admin.killGateMode){
 							admin.showGateSelect(hex);
 						}
-						else {
+						else if (admin.createGateMode){
 							admin.showGateCreation(hex);
 						}
 					}
@@ -212,11 +218,8 @@ function mouseCanvasClickAddMove(hex){
 function mouseCanvasZoom(e){
 	e.preventDefault();	
 	if (grid){
-			if (! moveManager.activeFleet){
-		//	var rect = this.getBoundingClientRect();		
-		//	var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
-		//	var hex = grid.getHexAtPos(pos);
-		
+		if (! moveManager.activeFleet){
+	
 			cam.adjustZoom(e);
 			cam.undoScroll();
 			unDraw();
@@ -231,7 +234,6 @@ function mouseCanvasZoom(e){
 			
 			drawHexGrid();
 			moveManager.drawCurrentOrders(moveCtx);
-			
 		}
 	}	
 }
@@ -240,27 +242,30 @@ function mouseCanvasScroll(e){
 	e.preventDefault();
 	
 	if (grid){
-		var rect = this.getBoundingClientRect();		
-		var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
-		var hex = grid.getHexAtPos(pos);
-		
-		if (hex){
-			cam.undoScroll();
-			cam.doScroll(hex);
-			unDraw();			
-			drawCenter();
-			drawHexGrid();
+		if (! moveManager.activeFleet){
+			var rect = this.getBoundingClientRect();		
+			var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
+			var hex = grid.getHexAtPos(pos);
 			
-			if (selectedHex){
-				selectedHex = grid.getHexById(selectedHex.id);
-				selectedHex.drawLanes(jumpCtx);
-			}			
+			if (hex){
+				cam.undoScroll();
+				cam.doScroll(hex);
+				unDraw();			
+				drawCenter();
+				drawHexGrid();
+				
+				if (selectedHex){
+					selectedHex = grid.getHexById(selectedHex.id);
+					selectedHex.drawLanes(jumpCtx);
+				}	
+			}		
 		}
 	}
 }
 
 function moveorderClick(e){
 	e.stopPropagation();
+	console.log("click");
 	if (selectedFleet){
 		if (this.id.substr(9) == selectedFleet.id){
 			if (this.innerHTML == "Plan Movement"){

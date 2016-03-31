@@ -24,11 +24,28 @@ if (isset($_POST["lanes"])){
 		}
 	}
 }
+else if (isset($_POST["gateLaneItem"])){
+	$items = JSON_decode($_POST["gateLaneItem"], true);
+	var_dump($items);
+
+	if ($dbManager->insertGatesAndLanes($items)){
+		Debug::log("gate / lane created");
+	}
+}
 else if (isset($_POST["gates"])){
 	$gates = JSON_decode($_POST["gates"], true);
-	foreach ($gates as $gate){
-		if ($dbManager->insertGate($gate)){
+
+	if ($gates["type"] == "create"){
+		if ($dbManager->insertGates($gates)){
 			Debug::log("gate created");
+		}
+		else {
+			Debug::log("gate ERROR");
+		}
+	}
+	else if ($gates["type"] == "destroy"){
+		if ($dbManager->deleteGates($gates)){
+			Debug::log("gate deleted");
 		}
 		else {
 			Debug::log("gate ERROR");
@@ -121,8 +138,15 @@ else if (isset($_POST["nameChange"])){
 else if (isset($_POST["shipTransfer"])){
 	$dbManager->shipTransfer($_POST["shipTransfer"]);	
 }
-else if (isset($_POST["createMarker"])){
-	$dbManager->createMarker($_POST["createMarker"]);	
+else if (isset($_POST["marker"])){
+	$marker = JSON_decode($_POST["marker"], true);
+
+	if ($marker["type"] == "create"){
+		$dbManager->createMarker($marker);
+	}
+	else if ($marker["type"] == "delete"){
+		$dbManager->deleteMarker($marker);
+	}
 }
 else {
 	echo "no data to be found";
