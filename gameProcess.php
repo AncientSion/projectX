@@ -15,8 +15,6 @@ if (isset($_SESSION["userid"])
 		$dbManager = DBManager::app();
 		$manager = new Manager($_SESSION["userid"], $_GET["gameid"]);
 	//	$turn = $dbManager->getCurrentTurn($_GET["gameid"]);
-
-		$welcome .= "Game Procession Overview for game: ".$_GET["gameid"]." @ turn: ".$_GET["turn"];
 		
 		$fleetsInfo = $dbManager->getFleetInfoForTurnProcession($_GET["gameid"]);
 		$currentSubTick = $manager->getSubTickForGame($_GET["gameid"])["subtick"];
@@ -35,9 +33,7 @@ if (isset($_SESSION["userid"])
 <html>
 <head>
 	<link rel='stylesheet' href='style.css'/>
-	<script src="jquery-2.1.1.min.js"></script>
-	
-	
+	<script src="jquery-2.1.1.min.js"></script>	
 </head>
 	<body>	
 		<a style="margin: auto" href="lobby.php">Return to Lobby</a>
