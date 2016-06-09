@@ -1,5 +1,9 @@
 window.ajax = {
 
+	requestTurnProcession: function(){
+		alert("requestTurnProcession");
+	},
+
 	joinGame: function(gameid, callback){
 		$.ajax({
 			type: "POST",
@@ -167,6 +171,9 @@ window.ajax = {
 
 							document.body.appendChild(div);
 					}
+					else {
+						gamedata.canCommit = true;
+					}
 				}
 			}
 		});
@@ -213,6 +220,7 @@ window.ajax = {
 				
 				for (var j = 0; j < grid.hexes.length; j++){
 					if (data.x == grid.hexes[j].x && data.y == grid.hexes[j].y){
+					//	console.log(grid.hexes[j].id);
 						grid.hexes[j].specials.push(data);
 
 						if (data.type == "Black Hole"){
@@ -232,6 +240,9 @@ window.ajax = {
 						}
 						else if (data.type == "Hyperspace Waveforms"){
 							icon = special_icons[5];
+						}
+						else {
+							icon = undefined;
 						}
 
 						grid.hexes[j].specials[grid.hexes[j].specials.length-1].icon = icon;
@@ -311,7 +322,7 @@ window.ajax = {
 			}
 		}
 
-		ajax.getGates()
+		ajax.getGatesAndLanes()
 	},
 
 
@@ -324,7 +335,7 @@ window.ajax = {
 
 		item = JSON.stringify(item);
 
-		console.log(item);
+		//console.log(item);
 
 		$.ajax({
 			type: "POST",
@@ -336,10 +347,10 @@ window.ajax = {
 		});
 	},
 
-	killGates: function(id){
+	killLane: function(id){
 		var item = {
 			gameid: gameid,
-			ids: id,
+			laneid: id,
 			type: "destroy"
 		};
 
@@ -391,7 +402,7 @@ window.ajax = {
 
 	},
 
-	getGates: function(){
+	getGatesAndLanes: function(){
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
@@ -402,118 +413,62 @@ window.ajax = {
 				type: "gates"
 				},		
 			error: ajax.error,
-			success: ajax.getLanes,
+			success: ajax.createGatesAndLanes
 		});
 	},
 
-	getLanes: function(gates){
-		$.ajax({
-			type: "GET",
-			url: "getGameData.php",
-			datatype: "json",
-			data: {
-				userid: userid,
-				gameid: gameid,
-				type: "lanes"
-				},		
-			error: ajax.error,
-			success: function(lanes){
-				ajax.createGatesAndLanes(lanes, gates);
-			}
-		});
-	},
+	createGatesAndLanes: function(data){
 
-	createGatesAndLanes: function(lanes, gates){
-		var realGates = [];
-		var realLanes = [];
-		var list;
+		var list = JSON.parse(data);
+		var items = [];
 
-
-		list = JSON.parse(gates);
 		if (list){
 			for (var i = 0; i < list.length; i++){
-				var gate = new Jumpgate(
-					list[i].id,
-					list[i].owner,
-					[list[i].x, list[i].y],
-					0, 
-					1
-					)
-				
-				realGates.push(gate);
-			}
-		}
+				var route = list[i].lane.path;
 
 
-		list = JSON.parse(lanes);
-		if (list){					
-			for (var i = 0; i < list.length; i++){
-				var data = list[i];
-				
-				
 				var lane = new Lane();
-				var location = [];
-
-				for (var j in data){
-					if (j == "id"){
-						lane.id = data[j];
-					}
-					else if (j == "gameid"){
-						continue;
-					}
-					else if (j == "startGate"){
-						lane.startGate = data[j];
-					}
-					else if (j == "endGate"){
-						lane.endGate = data[j];						
-					}
-					else if (data[j] == null){
-					//	console.log("break");			
-						break;
-					}
-					else {
-						if (location.length < 2){
-							location.push(data[j]);
-							
-							if (location.length == 2){
-								lane.path.push(location);
-								location = [];
-							}
-						}
-					}
+					lane.id = list[i].lane.id;
+				for (var j = 0; j < route.length; j++){
+					lane.path.push(route[j]);
 				}
+
+				var phpGate = list[i]["startGate"];
+				var gate = new Jumpgate(
+					phpGate.id,
+					phpGate.owner,
+					[phpGate.x, phpGate.y],
+					0, 
+					1,
+					lane
+				)
+				items.push(gate);
+
+
+
+
+				var lane = new Lane();
+					lane.id = list[i].lane.id;
+				for (var j = route.length-1; j >= 0; j--){
+					lane.path.push(route[j]);
+				}
+
+				var phpGate = list[i]["endGate"];
+				var gate = new Jumpgate(
+					phpGate.id,
+					phpGate.owner,
+					[phpGate.x, phpGate.y],
+					0, 
+					1,
+					lane
+				)
+				items.push(gate);
+
 				
-				realLanes.push(lane);
 			}
 		}
 
-		var finished = [];
-
-
-		for (var i = 0; i < realLanes.length; i++){
-			for (var j = 0; j < realGates.length; j++){
-				if (realGates[j].id == realLanes[i].startGate){
-					realGates[j].lane = realLanes[i];	
-				}
-				else if (realGates[j].id == realLanes[i].endGate){
-					var lane = new Lane();
-						lane.id = realLanes[i].id;
-						lane.copy = true;
-						lane.startGate = realLanes[i].endGate;
-						lane.endGate = realLanes[i].startGate;
-						lane.path = [];
-
-					for (var k = realLanes[i].path.length-1; k >= 0; k--){
-						lane.path.push(realLanes[i].path[k]);
-					}
-
-					realGates[j].lane = lane;
-				}
-			}
-		}
-
-
-		ajax.parseGates(realGates);
+		ajax.parseGates(items);
 		ajax.getFleets();
 
 
@@ -532,7 +487,7 @@ window.ajax = {
 		}
 	},
 
-	postFleets: function(fleets){		
+	postFleets: function(fleets){
 		fleets = JSON.stringify(fleets);
 		//console.log(fleets);
 	
@@ -590,30 +545,67 @@ window.ajax = {
 				},		
 			error: ajax.error,
 			success: function(moves){
-					ajax.createFleets(fleets, ships, moves);
+					ajax.getValidLanes(fleets, ships, moves);
 			}
 		});
-
 	},
 
-	createFleets: function(fleetlist, shiplist, movelist){
+	getValidLanes: function(fleets, ships, moves){
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+				type: "validLanes"
+				},		
+			error: ajax.error,
+			success: function(lanes){
+					ajax.createFleets(fleets, ships, moves, lanes);
+			}
+		});
+	},
 
+	createFleets: function(fleetlist, shiplist, movelist, lanelist){
+	
+	//	console.time("start");
+
+	//	console.log(lanelist)
 		var fleets = [];
 		var ships = [];
 		var moves = [];
-
+		var lanes = []
+		
+		var userFleets = [];
+		
 		// Create Fleets
 		fleetlist = JSON.parse(fleetlist);
+		lanelist = JSON.parse(lanelist);
+		
 		if (fleetlist){
 			for (var i = 0; i < fleetlist.length; i++){
 				var data = fleetlist[i];
 				
-				var fleet = new Fleet();
-					fleet.id = data.id;
-					fleet.location = [data.x, data.y];
-					fleet.name = data.name;
+				var fleet = new Fleet(data.id, data.playerid, [data.x, data.y], data.name);
+
+					var found = false;
+					for (var j = 0; j < lanelist.length; j++){
+						if (fleet.id == lanelist[j].fleetid){
+							found = true;
+							fleet.validLanes.push( {laneid: lanelist[j].jumplaneid, loc: [lanelist[j].x, lanelist[j].y]} );
+						}
+						else if (found == true & fleet.id != lanelist[j].fleetid){
+							found = false;
+							break;
+						}
+					}
 
 					fleets.push(fleet);
+					
+					if (fleet.owner == userid){
+						userFleets.push(fleet.id);
+					}
+		//			console.log(fleet)
+		//			console.log(fleet.validLanes)
 			}
 		}
 
@@ -651,53 +643,80 @@ window.ajax = {
 
 		// create MovementOrder out of movelist		
 		movelist = JSON.parse(movelist);
+
 		if (movelist){
+
+		//	console.log(movelist);
+
 			var orders = [];
-			var movement = new MovementOrder();
-				movement.fleetId = null;
+
+			var	movement = new MovementOrder();
 				movement.moves = [];
 				movement.hmp = [];
 				movement.steps = [];
 
 			for (var i = 0; i < movelist.length; i++){
+				for (var j = 0; j < userFleets.length; j++){
 
-				if (movement.fleetId == null){
-					movement.fleetId = movelist[i].fleetid;
-					movement.turn = movelist[i].turn;
-				}
-				else if (movement.fleetId != movelist[i].fleetid){
-					orders.push(movement);
+					if (movelist[i].fleetid == userFleets[j]){
+						if (movement.fleetid == null){
+							movement.fleetid = movelist[i].fleetid;
+							movement.turn = movelist[i].turn;
+							movement.moves.push( [movelist[i].x, movelist[i].y] );
+							movement.hmp.push(movelist[i].hmp);
+							movement.steps.push(movelist[i].step);
+						}
+						else if (movement.fleetid != movelist[i].fleetid){
+							movement = new MovementOrder();
+							movement.moves = [];
+							movement.hmp = [];
+							movement.steps = [];
 
-					movement = new MovementOrder();
-					movement.fleetId = null;
-					movement.moves = [];
-					movement.hmp = [];
-					movement.steps = [];
-					movement.turn = movelist[i].turn;
-				}
+							movement.fleetid = movelist[i].fleetid;
+							movement.turn = movelist[i].turn;
+							movement.moves.push( [movelist[i].x, movelist[i].y] );
+							movement.hmp.push(movelist[i].hmp);
+							movement.steps.push(movelist[i].step);
+						}
+						else {
+							movement.moves.push( [movelist[i].x, movelist[i].y] );
+							movement.hmp.push(movelist[i].hmp);
+							movement.steps.push(movelist[i].step);
+						}
 
-				movement.moves.push( [movelist[i].x, movelist[i].y] );
-				movement.hmp.push(movelist[i].hmp);
-				movement.steps.push(movelist[i].step);
 
-				if (i == movelist.length-1){
-					orders.push(movement);
+
+						if (movelist[i+1] != null){
+							if (movelist[i+1].fleetid != movement.fleetid){
+								movement.moves.push( [movelist[i].x, movelist[i].y] );
+								movement.hmp.push(movelist[i].hmp);
+								movement.steps.push(movelist[i].step);
+								orders.push(movement);
+							}
+							else {
+								movement.moves.push( [movelist[i].x, movelist[i].y] );
+								movement.hmp.push(movelist[i].hmp);
+								movement.steps.push(movelist[i].step);
+							}
+						}
+					}
 				}
 			}
 
-			//	console.log(orders);
+		//	console.log(orders);
 
 			// put moves into fleets
 			for (var i = 0; i < fleets.length; i++){
 				for (var j = 0; j < orders.length; j++){
 					orders[j].getTotalHMP = function(){
-												total = 0;
-												for (var i = 0; i < this.hmp.length; i++){
-													total += this.hmp[i];
-												}
-												return total;
-											}
-					if (fleets[i].id == orders[j].fleetId){
+						total = 0;
+						for (var i = 0; i < this.hmp.length; i++){
+							total += this.hmp[i];
+						}
+						return total;
+					}
+
+					if (fleets[i].id == orders[j].fleetid){
 						orders[j].origin = fleets[i].location;
 						fleets[i].currentOrder = orders[j];
 					//	console.log(fleets[i]);
@@ -705,10 +724,10 @@ window.ajax = {
 					}
 				}
 			}
-
 			// put moves into moveManager
 			moveManager.orders = orders;
 		}
+		
 		
 		// put Fleets into Hexes
 		for (var i = 0; i < fleets.length; i++){
@@ -718,45 +737,21 @@ window.ajax = {
 				}
 			}
 		}
-
+		
 		cam.initialSetup();
+		grid.setVisibility();
 		drawHexGrid();
 
 	},
 
 
-	commitMoves: function(moves){
-
-		console.log("commitMoves")
-
-		newMoves = [];
-
-		for (var i = 0; i < moves.length; i++){
-			if (moves[i].turn == currentTurn){
-				newMoves.push(moves[i]);
-			}
-		}
-
-		if (newMoves){	
-			newMoves = JSON.stringify(newMoves);
-			console.log(moves);
-		
-			$.ajax({
-				type: "POST",
-				url: "postGameData.php",
-				datatype: "json",
-				data: {moves: newMoves},	
-				error: ajax.error,
-				success: ajax.endTurn
-			});
-		}
-	},
 
 
 	issueFleetMovement: function(order){
 		console.log("issueFleetMovement")
 
 		if (order.turn == currentTurn){
+			console.log(order);
 			order = JSON.stringify(order);
 
 			$.ajax({
@@ -765,7 +760,7 @@ window.ajax = {
 				datatype: "json",
 				data: {moveOrder: order},	
 				error: ajax.error,
-			success: ajax.echoReturn
+				success: ajax.echoReturn
 			});
 		}
 		else {
@@ -774,7 +769,9 @@ window.ajax = {
 	},
 
 
-	endTurn: function(){
+	confirmEndTurn: function(){
+
+		console.log("confirmEndTurn");
 
 		$.ajax({
 			type: "POST",
@@ -859,6 +856,42 @@ window.ajax = {
 			error: ajax.error,
 			success: ajax.echoReturn
 		})
+	},
+
+	createNewFleet: function(fleet){
+		fleet = JSON.stringify(fleet);
+	//	console.log(fleet);
+	
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {
+				fleets: fleet,
+				type: "create"
+				},	
+			error: ajax.error,
+			success: function(id){
+				transfer.finishNewFleetCreation(id, fleet);
+			}
+		});
+	},
+
+	deleteEmptyFleet: function(fleet){
+		fleet = JSON.stringify(fleet);
+	//	console.log(fleet);
+	
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {
+				fleets: fleet,
+				type: "delete"
+				},	
+			error: ajax.error,
+			success: ajax.echoReturn
+		});
 	}
 }
 

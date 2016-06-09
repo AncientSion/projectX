@@ -126,7 +126,7 @@ if (isset($_SESSION["userid"])
 
 
 		</div>
-		<div style="margin: auto; display: block; width: 60%;">
+		<div style="margin: auto; display: block;">
 			<div id="gui">
 			</div>
 			<canvas id="hexCanvas"></canvas>

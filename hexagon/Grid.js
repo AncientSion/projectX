@@ -153,3 +153,164 @@ Grid.prototype.GetNearestHex = function(/*Point*/ p) {
 
 	return hx;
 };
+
+Grid.prototype.getHexByIndex = function(idArray){
+	return this.hexes[ (idArray[0]-1) * 44 + (idArray[1]-1) ];
+}
+
+
+Grid.prototype.getLaneOriginInRadiusByLaneId = function(hex, laneId){
+
+	var r;
+	var found = false;
+
+	var x = hex.id[0];
+	var y = hex.id[1];
+
+	var center;
+		center = (x-1) * 44 + (y-1);
+
+//	var adjacent = hex.getAdjacent();
+//  console.log(adjacent);
+
+	var result = [];
+
+	for (r = 0; ! found; r++){
+		result = [];
+
+		if (r == 0){
+			result.push(hex);
+		}
+		else if (r == 1){
+			var adja = hex.getAdjacent();
+			for (var i = 0; i < adja.length; i++){
+				result.push(adja[i]);
+			}
+		}
+		else if (r == 2){
+			var valid = [];
+
+			if (x % 2 != 0){
+				valid = [
+					[x + 0, y - 2],
+					[x + 1, y - 1],
+					[x + 2, y - 1],
+					[x + 2, y + 0],
+					[x + 2, y + 1],
+					[x + 1, y + 2],
+					[x + 0, y + 2],
+					[x - 1, y + 2],
+					[x - 2, y + 1],
+					[x - 2, y - 0],
+					[x - 2, y - 1],
+					[x - 1, y - 1],
+				];
+			}
+			else {
+				valid = [
+					[x + 0, y - 2],
+					[x + 1, y - 2],
+					[x + 2, y - 1],
+					[x + 2, y + 0],
+					[x + 2, y + 1],
+					[x + 1, y + 1],
+					[x + 0, y + 2],
+					[x - 1, y + 1],
+					[x - 2, y + 0],
+					[x - 2, y + 1],
+					[x - 2, y - 1],
+					[x - 1, y - 2],
+				];
+			}
+
+			for (var i = 0; i < valid.length; i++){
+				result.push( grid.hexes[ (valid[i][0]-1) * 44 + (valid[i][1]-1) ] );
+			}
+		}
+		else if (r == 3){
+			var valid = [];
+
+			if (x % 2 != 0){
+				valid = [
+					[x + 0, y - 3],
+					[x + 1, y - 2],
+					[x + 2, y - 2],
+					[x + 3, y - 1],
+					[x + 3, y + 0],
+					[x + 3, y + 1],
+					[x + 3, y + 2],
+					[x + 2, y + 2],
+					[x + 1, y + 3],
+					[x - 0, y + 3],
+					[x - 1, y + 3],
+					[x - 2, y + 2],
+					[x - 3, y + 2],
+					[x - 3, y + 1],
+					[x - 3, y + 0],
+					[x - 3, y - 1],
+					[x - 2, y - 2],
+					[x - 1, y - 2],
+				];
+			}
+			else {
+				valid = [
+					[x + 0, y - 3],
+					[x + 1, y - 3],
+					[x + 2, y - 2],
+					[x + 3, y - 2],
+					[x + 3, y - 1],
+					[x + 3, y + 0],
+					[x + 3, y + 1],
+					[x + 2, y + 2],
+					[x + 1, y + 2],
+					[x - 0, y + 3],
+					[x - 1, y + 2],
+					[x - 2, y + 2],
+					[x - 3, y + 1],
+					[x - 3, y + 0],
+					[x - 3, y - 1],
+					[x - 3, y - 2],
+					[x - 2, y - 2],
+					[x - 1, y - 3],
+				];
+			}
+
+
+			for (var i = 0; i < valid.length; i++){
+				result.push( grid.hexes[ (valid[i][0]-1) * 44 + (valid[i][1]-1) ] );
+			}
+		}
+		else {
+			console.log("r break");
+			found = true;
+		}
+
+		for (var i = 0; i < result.length; i++){
+			if (! found){
+				for (var j = 0; j < result[i].contains.length; j++){
+					if (result[i].contains[j] instanceof Jumpgate){
+						if (result[i].contains[j].lane.id == laneId){
+							//console.log(result[i].contains[j].lane.id);
+							console.log("origin found on r: " + r);
+							found = true;
+							return result[i];
+						}
+					}
+				}
+			}
+			else {
+				console.log("origin not found");
+				break;
+			}
+		}
+	}
+}
+	
+Grid.prototype.setVisibility = function(){
+	
+//	console.time("visis");
+	for (var i = 0; i < this.hexes.length; i++){
+		grid.hexes[i].setVisibility();
+	}
+//	console.timeEnd("visis");
+}

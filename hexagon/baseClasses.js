@@ -1,14 +1,18 @@
-function MovementOrder(fleetid, moves, origin, hmp, turn){
-	this.fleetId = fleetid
+function MovementOrder(fleetid, moves, origin, hmp, validLanes, turn){
+	this.fleetid = fleetid
 	this.origin = origin
 	this.moves = [];
 	this.hmp = hmp;
 	this.turn = turn;
+	this.validLanes = [];
 
 	if (moves != undefined){
 		for (var i = 0; i < moves.length; i++){
 			this.moves.push(moves[i].id)
 		}
+	}
+	if (validLanes){
+		this.validLanes = validLanes;
 	}
 
 	this.getTotalHMP = function(){
@@ -20,11 +24,32 @@ function MovementOrder(fleetid, moves, origin, hmp, turn){
 	}
 }
 
-function Fleet(){
+function Fleet(id, owner, loc, name){
 	this.type = "Fleet";
+	this.id = id;
+	this.owner = owner;
 	this.ships = [];
-	this.currentLocation;
+	this.location = loc;
+	this.name = name;
 	this.currentOrder;
+	this.validLanes = [];
+
+
+	this.hasJumpEngine = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].jumpdrive){
+				return true;
+			}
+		}
+	}
+	
+	this.hasElint = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].elint){
+				return true;
+			}
+		}
+	}
 }
 
 function Planet(id, owner, name, loc, level, baseIncome, baseTrade, type, enviroment, notes_1, notes_2, notes_3){
@@ -89,14 +114,14 @@ function Ship(id, fleetid, size, model, name, elint, scanner, jumpdrive, notes){
 	//console.log(this);
 }
 
-function Jumpgate(id, owner, location, damaged, usable){
+function Jumpgate(id, owner, location, damaged, usable, lane){
 	this.type = "Jumpgate";
 	this.id = id;
 	this.owner = owner;
 	this.location = location;
 	this.damaged = damaged;
 	this.usable = usable;
-	this.lane;
+	this.lane = lane
 }
 
 function Lane(){

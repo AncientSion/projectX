@@ -10,10 +10,10 @@ class DBManager {
 
 		if ($this->connection === null){
 			$this->connection = new PDO("mysql:host=localhost;dbname=projectx",
-							"aatu",
-							"Kiiski",
-						//	"root",
-						//	"147147",
+						//	"aatu",
+						//	"Kiiski",
+							"root",
+							"147147",
 							array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 		}
 	//	if ($this->connection != null){
@@ -68,13 +68,16 @@ class DBManager {
 		if ($valid){
 			$stmt = $this->connection->prepare("
 				INSERT INTO player
-					(username, password)
+					(username, password, access)
 				VALUES
-					(:username, :password)
+					(:username, :password, :access)
 			");
+
+			$access = 0;
 			
 			$stmt->bindParam(":username", $name);
 			$stmt->bindParam(":password", $pass);
+			$stmt->bindParam(":access", $access);
 			
 			$stmt->execute();
 			echo "<script>alert('Account created, please login');</script>";
@@ -87,7 +90,7 @@ class DBManager {
 	public function validateLogin($name, $pass){
 		
 		$stmt = $this->connection->prepare("
-			SELECT id FROM player
+			SELECT id, access FROM player
 			WHERE username = :username
 			AND	password = :password
 		");
@@ -96,10 +99,10 @@ class DBManager {
 		$stmt->bindParam(":password", $pass);
 		$stmt->execute();
 				
-		$result = $stmt->fetch();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		
 		if ($result){
-			return $result["id"];
+			return $result;
 		}
 		else {
 			return false;
@@ -140,7 +143,7 @@ class DBManager {
 		}
 		else {
 			return false;
-		}	
+		}
 	}
 
 	public function getGameDetails($id){
@@ -172,9 +175,6 @@ class DBManager {
 
 	
 	public function getSectors($userid, $gameid){
-	//	Debug::log("getSectors");
-	//	Debug::log("user".$userid);
-	//	Debug::log("game".$gameid);
 
 		$stmt = $this->connection->prepare("
 			SELECT x, y, type FROM sectorspecials 
@@ -208,14 +208,13 @@ class DBManager {
 	}
 	
 	public function getGates($userid, $gameid){
+
 		$stmt = $this->connection->prepare("
-				SELECT id, owner, x, y FROM jumpgates WHERE gameid = :gameid
-				");
+			SELECT id, owner, x, y FROM jumpgates WHERE gameid = :gameid
+		");
 
 		$stmt->bindParam(":gameid", $gameid);
 		$stmt->execute();
-
-
 		
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -223,12 +222,16 @@ class DBManager {
 			return $result;
 		}
 	}
-	
+
+
 	public function getLanes($userid, $gameid){
 
 		$stmt = $this->connection->prepare("
-			SELECT * FROM jumplanes
-			WHERE gameid = :gameid
+			SELECT jumplanes.id, jumplanes.startGate, jumplanes.endGate, jumplanes.x, jumplanes.y
+			FROM jumplanes
+			LEFT JOIN jumpgates
+			ON jumpgates.id = jumplanes.startGate
+			WHERE jumpgates.gameid = :gameid 
 		");
 
 		$stmt->bindParam(":gameid", $gameid);
@@ -240,16 +243,52 @@ class DBManager {
 			return $result;
 		}
 	}	
+
+
+	public function getLaneById($gateid){
+
+		$stmt = $this->connection->prepare("
+			SELECT * FROM jumplanes
+			WHERE startGate = :gateid
+		");
+
+		$stmt->bindParam(":gateid", $gateid);
+		$stmt->execute();
+		
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+				
+		if ($result){
+			return $result;
+		}
+	}
+
+
+	public function getLaneSteps($laneid){
+
+		$stmt = $this->connection->prepare("
+			SELECT * FROM lanesteps
+			WHERE jumplaneid = :jumplaneid
+		");
+
+		$stmt->bindParam(":jumplaneid", $laneid);
+		$stmt->execute();
+		
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				
+		if ($result){
+			return $result;
+		}
+	}
+
 		
 	public function getFleets($userid, $gameid){
 		$stmt = $this->connection->prepare("
-			SELECT id, gameid, playerid, name, tfnumber, x, y, elint
+			SELECT id, gameid, playerid, name, tfnumber, x, y
 			FROM fleets
 			WHERE gameid = :gameid
 		");				
 				
 		$stmt->bindParam(":gameid", $gameid);
-	//	$stmt->bindParam(":playerid", $user);
 		$stmt->execute();
 		
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -278,28 +317,57 @@ class DBManager {
 			Debug::log("no ships results");
 		}		
 	}	
-	
+		
 	public function getMovesForFleets($userid, $gameid){
+
 		$stmt = $this->connection->prepare("
 			SELECT moves.fleetid, moves.step, moves.x, moves.y, moves.hmp, moves.turn
 			FROM moves
 			LEFT JOIN fleets
 			ON moves.fleetid = fleets.id
-			AND fleets.gameid = :game
-			ORDER BY moves.fleetid, moves.step 
+			AND fleets.playerid = :playerid
+			AND fleets.gameid = :gameid
+			ORDER BY moves.fleetid ASC, moves.step ASC
 		");
 		
-		$stmt->bindParam(":game", $gameid);
+		$stmt->bindParam(":playerid", $userid);
+		$stmt->bindParam(":gameid", $gameid);
 		$stmt->execute();
 		
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-				
+
 		if ($result){
 			return $result;
 		}
 		else {
 	//		Debug::log("no getMovesForFleets results");
 		}		
+	}
+
+	public function getValidLaneIdForFleets($userid, $gameid, $turn){
+		$stmt = $this->connection->prepare("
+			SELECT validlanes.fleetid, validlanes.jumplaneid, jumpgates.x, jumpgates.y FROM validlanes
+			INNER JOIN fleets
+				ON validlanes.fleetid = fleets.id
+				AND fleets.playerid = :playerid
+				AND fleets.gameid = :gameid
+			INNER JOIN jumplanes 
+				ON validlanes.jumplaneid = jumplanes.id
+			INNER JOIN jumpgates
+				ON jumplanes.startGate = jumpgates.id
+			WHERE validlanes.validForTurn = :turn
+		");
+
+		$stmt->bindParam(":playerid", $userid);
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":turn", $turn);
+
+		$stmt->execute();
+
+		if ($stmt->errorCode() == 0){
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			return $result;
+		}
 	}
 
 	public function getOngoingGames($id){
@@ -376,6 +444,63 @@ class DBManager {
 		}
 		else {
 		//	debug::log("no gams found");
+			return null;
+		}
+	}
+
+
+
+	public function getAllUnfinishedGames(){
+
+	/*	$stmt = $this->connection->prepare("
+			SELECT games.id, games.name, games.status as gamestatus, games.turn, playerstatus.playerid, playerstatus.turn, playerstatus.status as playerstatus, player.username FROM games
+				INNER JOIN playerstatus
+				ON games.id = playerstatus.gameid
+				INNER JOIN player
+				ON playerstatus.playerid = player.id
+			WHERE games.status <> (:finished)
+		");
+	*/
+
+		$stmt = $this->connection->prepare("
+			SELECT * FROM games
+			WHERE status <> (:finished)
+		");
+		$finished = "finished";
+		$stmt->bindParam(":finished", $finished);
+
+		$stmt->execute();
+
+		$result = $stmt->FetchAll(PDO::FETCH_ASSOC);
+		$playerInfo = array();
+
+		for ($i = 0; $i < sizeof($result); $i++){
+			
+			$result[$i]["playerdata"] = array();
+
+			$stmt = $this->connection->prepare("
+				SELECT playerstatus.playerid, playerstatus.status, player.username FROM playerstatus
+				INNER JOIN player
+					ON playerstatus.playerid = player.id
+				WHERE playerstatus.gameid = :gameid
+			");
+
+			$stmt->bindParam(":gameid", $result[$i]["id"]);
+
+			$stmt->execute();
+
+			$playerdata = $stmt->FetchAll(PDO::FETCH_ASSOC);
+
+			if ($playerdata){
+				$result[$i]["playerdata"] = $playerdata;
+			}
+
+		}
+		
+		if ($result){
+			return $result;
+		}
+		else {
 			return null;
 		}
 	}
@@ -494,9 +619,9 @@ class DBManager {
 		");
 
 		foreach ($players as $player){
-			Debug::log("userid: ".$player["userid"]);	
-			Debug::log("gameid: ".$gameid);	
-			Debug::log("status: ".$status);				
+		//	Debug::log("userid: ".$player["userid"]);	
+		//	Debug::log("gameid: ".$gameid);	
+		//	Debug::log("status: ".$status);				
 
 			$stmt->bindParam(":status", $status);
 			$stmt->bindParam(":gameid", $gameid);
@@ -514,43 +639,6 @@ class DBManager {
 		}
 	}
 
-	public function insertLane($gateid, $lane, $gameid){
-
-		$stmt = $this->connection->prepare("
-			INSERT INTO jumplanes
-				(gameid, startGate, endGate, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6)
-			VALUES
-				(:gameid, :startGate, :endGate, :x1, :y1, :x2, :y2, :x3, :y3, :x4, :y4, :x5, :y5, :x6, :y6)
-		");
-
-		$startGate = $gateid - 1;
-		
-		$stmt->bindParam(":gameid", $gameid);
-		$stmt->bindParam(":startGate", $startGate);
-		$stmt->bindParam(":endGate", $gateid);
-		$stmt->bindParam(":x1", $lane[0][0]);
-		$stmt->bindParam(":y1", $lane[0][1]);
-		$stmt->bindParam(":x2", $lane[1][0]);
-		$stmt->bindParam(":y2", $lane[1][1]);
-		$stmt->bindParam(":x3", $lane[2][0]);
-		$stmt->bindParam(":y3", $lane[2][1]);
-		$stmt->bindParam(":x4", $lane[3][0]);
-		$stmt->bindParam(":y4", $lane[3][1]);
-		$stmt->bindParam(":x5", $lane[4][0]);
-		$stmt->bindParam(":y5", $lane[4][1]);
-		$stmt->bindParam(":x6", $lane[5][0]);
-		$stmt->bindParam(":y6", $lane[5][1]);
-		
-		$stmt->execute();
-		
-		if ($stmt->errorCode() == 0){
-			return true;
-		}
-		else {
-			return false;
-		}	
-	}
-
 
 	public function insertGatesAndLanes($items){
 		foreach ($items as $item){
@@ -559,9 +647,12 @@ class DBManager {
 			$gates[] = $item["endGate"];
 
 			if ($this->insertGates($gates)){
-				$id = $this->getLastInsertId();			
-				if ($this->insertLane($id, $item["lane"], $item["startGate"]["gameid"])){
-					return true;
+				$id = $this->getLastInsertId();
+				if ($this->insertLane($id, $item["startGate"]["gameid"])){
+					$id = $this->getLastInsertId();
+					if ($this->insertLaneSteps($id, $item["lane"])){
+						return true;
+					}
 				}
 			}
 		}
@@ -579,7 +670,7 @@ class DBManager {
 		$start = 0;
 
 		foreach ($gates as $gate){
-			
+				
 			$stmt->bindParam(":gameid", $gate["gameid"]);
 			$stmt->bindParam(":owner", $gate["owner"]);
 			$stmt->bindParam(":x", $gate["loc"][0]);
@@ -597,32 +688,50 @@ class DBManager {
 				return false;
 			}
 		}
-
 		return true;
 	}
-/*	public function insertGates($obj){
+
+
+	public function insertLane($lastGateId, $gameid){
 
 		$stmt = $this->connection->prepare("
-			INSERT INTO jumpgates
-				(gameid, owner, x, y, turn_build, damage, useable)
+			INSERT INTO jumplanes 
+				(startGate, endGate)
 			VALUES
-				(:gameid, :owner, :x, :y, :turn_build, :damage, :useable)
+				(:startGate, :endGate)
 		");
 
-		$start = 0;
+		$startGate = floor($lastGateId - 1);
 
-		foreach ($obj["gates"] as $gate){
-			
-			$stmt->bindParam(":gameid", $obj["gameid"]);
-			$stmt->bindParam(":owner", $gate["owner"]);
-			$stmt->bindParam(":x", $gate["loc"][0]);
-			$stmt->bindParam(":y", $gate["loc"][1]);
-			$stmt->bindParam(":turn_build", $start);
-			$stmt->bindParam(":damage", $gate["damage"]);
-			$stmt->bindParam(":useable", $gate["useable"]);
-			
+		$stmt->bindParam(":startGate", $startGate);
+		$stmt->bindParam(":endGate", $lastGateId);
+	
+		$stmt->execute();
+
+		if ($stmt->errorCode() == 0){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function insertLaneSteps($laneid, $steps){
+		$stmt = $this->connection->prepare("
+			INSERT INTO lanesteps
+				(jumplaneid, x, y)
+			VALUES
+				(:jumplaneid, :x, :y)
+			");
+
+
+		foreach ($steps as $step){
+			$stmt->bindParam(":jumplaneid", $laneid);
+			$stmt->bindParam(":x", $step[0]);
+			$stmt->bindParam(":y", $step[1]);
+
 			$stmt->execute();
-			
+
 			if ($stmt->errorCode() == 0){
 				continue;
 			}
@@ -630,33 +739,29 @@ class DBManager {
 				return false;
 			}
 		}
-
-		return true;
 	}
-	*/
 
-	public function deleteGates($obj){
+	public function deleteLane($obj){
 
-		$stmt = $this->connection->prepare("
-			DELETE FROM jumpgates WHERE gameid = :gameid AND id = :id
-		");
+		$laneid = $obj["laneid"];
 
-		foreach ($obj["ids"] as $gate){
-			$stmt->bindParam(":gameid", $obj["gameid"]);
-			$stmt->bindParam(":id", $gate);
+		$sql = "SELECT * FROM jumplanes WHERE id = ".$laneid;
+		$result = $this->query($sql);
 
-			$stmt->execute();
+		$startGate = $result["startGate"];
+		$endGate = $result["endGate"];
 
-			if ($stmt->errorCode() == 0){
-				continue;
-			}
-			else {
-				return falsE;
-			}
+		$array = array();
+
+		$array[] = "DELETE FROM jumplanes WHERE id = ".$laneid;
+		$array[] = "DELETE FROM jumpgates WHERE id = ".$startGate." OR id = ".$endGate;
+		$array[] = "DELETE FROM lanesteps WHERE jumplaneid = ".$laneid;
+
+		foreach ($array as $sql){
+			$this->connection->query($sql);
 		}
 
 		return true;
-
 	}
 	
 	public function insertSector($sector){
@@ -723,12 +828,11 @@ class DBManager {
 		
 		$stmt = $this->connection->prepare("
 			INSERT INTO fleets
-				(gameid, playerid, name, tfnumber, x, y, elint)
+				(gameid, playerid, name, tfnumber, x, y)
 			VALUES
-				(:gameid, :playerid, :name, :tfnumber, :x, :y, :elint)
+				(:gameid, :playerid, :name, :tfnumber, :x, :y)
 		");
 		
-		$elint = 0;
 		
 		$stmt->bindParam(":gameid", $fleet["gameid"]);
 		$stmt->bindParam(":playerid", $fleet["playerid"]);
@@ -736,7 +840,6 @@ class DBManager {
 		$stmt->bindParam(":tfnumber", $fleet["tfnumber"]);
 		$stmt->bindParam(":x", $fleet["loc"][0]);
 		$stmt->bindParam(":y", $fleet["loc"][1]);
-		$stmt->bindValue(":elint", $elint);
 		$stmt->execute();
 		
 		if ($stmt->errorCode() == 0){
@@ -745,7 +848,52 @@ class DBManager {
 		else {
 			return false;
 		}	
-	}	
+	}
+
+	public function insertNewFleet($fleet){
+
+		$stmt = $this->connection->prepare("
+			INSERT INTO fleets
+				(gameid, playerid, name, tfnumber, x, y)
+			VALUES
+				(:gameid, :playerid, :name, :tfnumber, :x, :y)
+		");
+		
+		$tfnumber = 0;
+
+		$stmt->bindParam(":gameid", $fleet["gameid"]);
+		$stmt->bindParam(":playerid", $fleet["playerid"]);
+		$stmt->bindParam(":name", $fleet["name"]);
+		$stmt->bindParam(":tfnumber", $tfnumber);
+		$stmt->bindParam(":x", $fleet["location"][0]);
+		$stmt->bindParam(":y", $fleet["location"][1]);
+		$stmt->execute();
+		
+		if ($stmt->errorCode() == 0){
+			return $this->getLastInsertId();
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function deleteEmptyFleet($fleet){
+
+		$stmt = $this->connection->prepare("
+			DELETE FROM fleets WHERE id = :id
+		");
+
+		$stmt->bindParam(":id", $fleet["id"]);
+
+		$stmt->execute();
+
+		if ($stmt->errorCode() == 0 ){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
 	
 	public function insertShip($ship, $fleetid){
@@ -814,17 +962,9 @@ class DBManager {
 
 
 	public function insertMoves($order){
-		Debug::log("DB insertMoves");
+	//	Debug::log("DB insertMoves");
 
-		if (isset($order["cancel"])) {
-			if ($this->deleteOldMoves($order["fleetId"])) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		else if ($this->deleteOldMoves($order["fleetId"])) {
+		if ($this->deleteOldMoves($order["fleetid"])) {
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO moves
@@ -836,7 +976,7 @@ class DBManager {
 			for ($i = 0; $i < sizeof($order["moves"]); $i++) {
 				$subMove = $order["moves"][$i];
 
-				$stmt->bindParam(":fleetid", $order["fleetId"]);
+				$stmt->bindParam(":fleetid", $order["fleetid"]);
 				$stmt->bindParam(":turn", $order["turn"]);
 				$stmt->bindParam(":step", $i);
 				$stmt->bindParam(":x", $subMove[0]);
@@ -855,7 +995,80 @@ class DBManager {
 		}
 	}
 
+	public function checkForValidLaneEntries($order){
+	//	Debug::log("checkForValidLaneEntries");
+
+		$stmt = $this->connection->prepare("
+			SELECT * FROM validlanes WHERE fleetid = :fleetid
+		");
+
+		$stmt->bindParam(":fleetid", $order["fleetid"]);
+		$stmt->execute();
+
+		$result = $stmt->fetch();
+
+		if ($stmt->errorCode() == 0){			
+			if ($result){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	public function deleteOldValidLaneEntries($order){
+	//	Debug::log("deleteOldValidLaneEntries");
+
+		$stmt = $this->connection->prepare("
+			DELETE FROM validlanes WHERE fleetid = :fleetid
+		");
+
+		$stmt->bindParam(":fleetid", $order["fleetid"]);
+		$stmt->execute();				
+
+		if ($stmt->errorCode() == 0){
+			return true;
+		}
+	}
+
+	public function insertNewValidLaneEntries($order){
+	//		Debug::log("insertNewValidLaneEntries");
+		
+		$turn = $order["turn"] + 1;
+		
+		$stmt = $this->connection->prepare("
+			INSERT INTO validlanes
+				(fleetid, jumplaneid, validForTurn)
+			VALUES
+				(:fleetid, :jumplaneid, :validForTurn)
+		");
+		
+
+		foreach ($order["validLanes"] as $valid){
+			$stmt->bindParam(":fleetid", $order["fleetid"]);
+			$stmt->bindParam(":jumplaneid", $valid["id"]);
+			$stmt->bindParam(":validForTurn", $turn);
+
+			$stmt->execute();
+			if ($stmt->errorCode() == 0){
+				Debug::log("success");
+				continue;
+			}
+			else {
+				Debug::log("error");
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+
 	public function endTurnForPlayerInGame($playerid, $gameid){
+
+	//	debug::log("ding");
 
 		$stmt = $this->connection->prepare("
 			UPDATE playerstatus
@@ -1030,6 +1243,62 @@ class DBManager {
 			return false;
 		}
 	}
-}
+
+
+	public function getFleetInfoForTurnProcession($gameid){
+	
+		$stmt = $this->connection->prepare("
+			SELECT fleets.id, fleets.playerid, fleets.name, fleets.x, fleets.y FROM fleets
+			WHERE
+				fleets.gameid = :gameid
+			ORDER BY fleets.playerid
+		");
+		
+		$stmt->bindParam(":gameid", $gameid);
+		
+		$stmt->execute();
+		
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if ($result){
+
+			$stmt = $this->connection->prepare("
+				SELECT step, x, y, hmp from moves
+				WHERE
+					fleetid = :fleetid
+			");
+
+			for ($i = 0; $i < sizeof($result); $i++){
+
+				$stmt->bindParam(":fleetid", $result[$i]["id"]);
+
+				$stmt->execute();
+
+				$subResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+				$result[$i]["moves"] = $subResult;
+			}
+			
+			return $result;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function getSubTickForGame($gameid){
+
+		$stmt = $this->connection->prepare("
+			SELECT subtick FROM subticks WHERE gameid = :gameid
+		");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$result = $stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $result;
+	}
+
+}		
 
 ?>

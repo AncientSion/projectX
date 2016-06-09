@@ -12,7 +12,19 @@ $dbManager = DBManager::app();
 $manager = new Manager($_SESSION["userid"]);
 $manager->gameid = $_SESSION["gameid"];
 
-if (isset($_POST["lanes"])){	
+
+if (isset($_POST["order"])){
+	debug::log("post");
+	if ($_POST["order"] == "endTurn"){
+		if ($manager->endCurrentTurn()){
+			Debug::log("turn adjusted to END");
+		}
+		else {
+			Debug::log("turn NOT adjusted to END");
+		}
+	}
+}
+else if (isset($_POST["lanes"])){	
 	$lanes = JSON_decode($_POST["lanes"]);
 
 	foreach ($lanes as $lane){
@@ -26,7 +38,7 @@ if (isset($_POST["lanes"])){
 }
 else if (isset($_POST["gateLaneItem"])){
 	$items = JSON_decode($_POST["gateLaneItem"], true);
-	var_dump($items);
+//	var_dump($items);
 
 	if ($dbManager->insertGatesAndLanes($items)){
 		Debug::log("gate / lane created");
@@ -44,11 +56,11 @@ else if (isset($_POST["gates"])){
 		}
 	}
 	else if ($gates["type"] == "destroy"){
-		if ($dbManager->deleteGates($gates)){
-			Debug::log("gate deleted");
+		if ($dbManager->deleteLane($gates)){
+			Debug::log("lane/gates deleted");
 		}
 		else {
-			Debug::log("gate ERROR");
+			Debug::log("lane/gates delete ERROR");
 		}	
 	}
 }
@@ -78,42 +90,52 @@ else if (isset($_POST["planets"])){
 }
 else if (isset($_POST["fleets"])){
 	$fleets = JSON_decode($_POST["fleets"], true);
-		
-	foreach ($fleets as $fleet){
-		if ($dbManager->insertFleet($fleet)){
-			Debug::log("fleet created");
-		}
-		else {
-			Debug::log("fleet ERROR");
-		}
 
-		$lastid = $dbManager->getLastInsertId();
-
-		foreach ($fleet["ships"] as $ship){
-			if ($dbManager->insertShip($ship, $lastid)) {
-				Debug::log("ship created");
+	if (isset($_POST["type"])){
+		if ($_POST["type"] == "create"){
+			$fleetid = $dbManager->insertNewFleet($fleets);
+			if ($fleetid){
+				echo $fleetid;
+			}
+		}
+		else if ($_POST["type"] == "delete"){
+			if ($dbManager->deleteEmptyFleet($fleets)){
+				return true;
+			}
+		}
+	}
+	else {
+			
+		foreach ($fleets as $fleet){
+			if ($dbManager->insertFleet($fleet)){
+				Debug::log("fleet created");
 			}
 			else {
-				Debug::log("ship ERROR");
+				Debug::log("fleet ERROR");
+			}
+
+			$lastid = $dbManager->getLastInsertId();
+
+			foreach ($fleet["ships"] as $ship){
+				if ($dbManager->insertShip($ship, $lastid)) {
+					Debug::log("ship created");
+				}
+				else {
+					Debug::log("ship ERROR");
+				}
 			}
 		}
 	}
 }
 else if (isset($_POST["moveOrder"])){
-	Debug::log("MOVES");
-	$moves = JSON_decode($_POST["moveOrder"], true);	
-
-	$return = $manager->insertMoves($moves);
-
-	if ($return){
-		Debug::log("moves success");
-	}
+	$moves = JSON_decode($_POST["moveOrder"], true);
+	echo $manager->insertMoves($moves);
 }
 else if (isset($_POST["type"])){
 	if ($_POST["type"] == "join"){
 		$gameid = $_POST["gameid"];
 		$playerid = $_SESSION["userid"];
-		Debug::log("type");
+	//	Debug::log("type");
 			if ($dbManager->joinGame($gameid, $playerid)){
 			return true;
 		}

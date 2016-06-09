@@ -84,12 +84,31 @@ class Manager {
 		}
 	}
 	
-	public function getGates(){
+	public function getGatesAndLanes(){
 		$gates = DBManager::app()->getGates($this->userid, $this->gameid);
-		
-		if ($gates){
-			return $gates;
+
+		$transfer = array();
+
+		for ($i = 0; $i < sizeof($gates); $i += 2){
+			$item = array();
+			$item["startGate"] = $gates[$i];
+			$item["endGate"] = $gates[$i+1];
+
+			$lane = DBManager::app()->getLaneById($gates[$i]["id"]);
+			$steps = DBManager::app()->getLaneSteps($lane["id"]);
+
+			foreach ($steps as $step){
+				$lane["path"][] = [$step["x"], $step["y"]];
+			}
+
+
+			$item["lane"] = $lane;
+
+			$transfer[] = $item;
+
 		}
+
+		return $transfer;
 	}
 	
 	public function getLanes(){
@@ -118,17 +137,31 @@ class Manager {
 
 	public function getMovesForFleets(){
 		$moves = DBManager::app()->getMovesForFleets($this->userid, $this->gameid);
-		
-		if ($moves){
-			return $moves;
-		}
+		return $moves;
 	}
 
-	public function insertMoves(){
-		Debug::log("insertMoves");
-		$order = JSON_decode($_POST["moveOrder"], true);
+	public function getValidLanesForFleets($turn){
+		$laneids = DBManager::app()->getValidLaneIdForFleets($this->userid, $this->gameid, $turn);
+		return $laneids;
+	}
+
+	public function insertMoves($order){
+	
+	//	Debug::log("insertMoves");
+		
+		if (isset($order["cancel"])){
+			if (DBManager::app()->deleteOldMoves($order["fleetid"])) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
 		if (DBManager::app()->insertMoves($order)){
-			return true;
+			if (DBManager::app()->insertNewValidLaneEntries($order)){
+				echo ("insert moves success");
+			}
 		}
 		else {
 			echo "insert moves error";
@@ -137,12 +170,20 @@ class Manager {
 
 	public function endCurrentTurn(){
 		if (DBManager::app()->endTurnForPlayerInGame($this->userid, $this->gameid)){
-			echo "turn adjusted";
+			return true;
 		}
 		else {
-			echo "turn NOT adjusted";
+			return false;
 		}
+	}
 
+	public function processTurnForGame($gameid, $turn){
+		Debug::log($gameid);
+		Debug::log($turn);
+	}
+
+	public function getSubTickForGame($gameid){
+		return DBManager::app()->getSubTickForGame($gameid);
 	}
 }
 

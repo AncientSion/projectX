@@ -23,7 +23,8 @@ input {
 
 
 #hexCanvas {
-	background:url(img/background.jpg);
+/*	background:url(img/background.jpg);
+*/	background-color: grey;
 }
 
 .lobbyDiv {
@@ -57,6 +58,21 @@ th {
 table, tr, td, a {
 	text-align: center;
 	margin: auto;
+}
+
+.processTableWrapper {
+	display: inline-block;
+	float: left;
+	width: 350px;
+	margin-right: 10px;
+}
+
+.processTable {
+	border-collapse: collapse;
+	border: 1px solid white;
+	display: inline-block;
+	width: 350px;
+	font-size: 12px;
 }
 
 .hidden {

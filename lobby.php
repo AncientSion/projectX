@@ -14,7 +14,7 @@ if (isset($_SESSION["userid"])){
 	$playerName = $manager->getUsername();
 	$_SESSION["username"] = $playerName;
 	
-	
+	$adminElement = false;
 	
 	$ongoingGames = $manager->getOngoingGames();
 	$openGames = $manager->getOpenGames();
@@ -37,7 +37,6 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</tr>";
 		
 		foreach ($ongoingGames as $game){
-
 
 			$gameStatus = $manager->getGameStatus($game["id"], $game["turn"]);
 			
@@ -105,6 +104,56 @@ if (isset($_SESSION["userid"])){
 		$waitingGamesElement = "<table>no games found</table>";
 	}
 	*/
+
+
+	if (isset($_SESSION["access"]) && $_SESSION["access"] == 1){
+
+		$gameData = $dbManager->getAllUnfinishedGames();
+
+	//	var_export($gameData);
+
+		if ($gameData){
+			$adminElement = "<table style='border: none'>";
+			$adminElement .= "<tr style='background-color:red'><th colSpan='3'>Admin Access Granted";
+			$adminElement .= "</th></tr>";
+		}
+
+		foreach ($gameData as $game){
+
+			$canProcess = true;
+
+			$adminElement .= "<tr>";
+			$adminElement .= "<th width='50%'>".$game["name"]." @ Turn: ".$game["turn"]."</th>";
+			$adminElement .= "<th>Playername</th>";
+			$adminElement .= "<th>Status</th>";
+			$adminElement .= "</tr>";
+			
+
+			foreach ($game["playerdata"] as $playerdata){
+
+				if ($playerdata["status"] != "ready"){
+					$canProcess = false;
+				}
+
+				$adminElement .= "<tr>";
+				$adminElement .= "<td></td>";
+				$adminElement .= "<td>".$playerdata["username"]."</td>";
+				$adminElement .= "<td>".$playerdata["status"]."</td>";
+				$adminElement .= "</tr>";
+			}
+
+			if ($canProcess){
+				$adminElement .= "<tr><td style='border: 2px solid white' colSpan = 3>";
+				$adminElement .= "<input type='button' id='".$game["id"].".".$game["turn"]."'value='PROCESS TURN' onclick='initTurnProcession(this.id)'></input>";
+				$adminElement .= "</td></tr>";
+			}
+			else {
+				$adminElement .= "<tr><td style='border: 2px solid white' colSpan = 3>UNABLE TO PROCESS YET</td></tr>";
+			}
+		}
+		
+		$adminElement .= "</table>";
+	}
 }
 else {
 		Debug::log("no user id");
@@ -135,16 +184,26 @@ else {
 			<span>Games im in, waiting for an Opponent</span>
 			<?php echo $waitingGamesElement; ?>
 		</div>
-	-->	<div class="lobbyDiv">
+	-->	
+		<div class="lobbyDiv">
 			<span>CREATE NEW GAME</span>
 			<input type="form" id="gameName" placeholder="Enter Game Name here"></input>	
 			<input type="button" value="createGame" onclick="createGame()"></input>
 		</div>
-		
+
+		<div class="lobbyDiv">
+			<?php
+				if ($adminElement){
+					echo $adminElement;
+				}
+			?>
+		</div>
+			
 	
 		<div class="lobbyDiv">
 			<a href="logout.php">LOGOUT</a>
 		</div>
+
 	</body>
 </html>
 
@@ -162,11 +221,19 @@ function createGame(){
 }
 
 function refresh(data){
-	console.log("refresh");
-	console.log(data);
+//	console.log("refresh");
+//	console.log(data);
 	setTimeout(function(){
 		window.location.reload(true);
 	}, 500);
+}
+
+
+function initTurnProcession(data){
+
+	var data = data.split(".");
+	console.log(data);
+	location.href = "gameProcess.php?gameid=" + data[0] + "&turn=" + data[1];
 }
 
 </script>

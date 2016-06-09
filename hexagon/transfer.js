@@ -80,7 +80,7 @@ function Transfer(){
 					input.value = "CONFIRM";
 					input.style.width = "70px";
 					input.addEventListener("click", function(){
-						transfer.createFleet();
+						transfer.createNewFleet();
 					})
 
 			td.appendChild(input);			
@@ -101,38 +101,42 @@ function Transfer(){
 			document.body.appendChild(topDiv);	
 	}
 
-	this.createFleet = function(){
+	this.createNewFleet = function(){
 		var name = document.getElementById("createFleetName").value;
 
 		if (name != ""){
-			var fleet = new Fleet();
-				fleet.id = 999;
-				fleet.location = selectedHex.id;
-				fleet.name = name;
-				fleet.action = "create";
+			var fleet = new Fleet(999, selectedHex.id, name);
+				fleet.gameid = gameid;
+				fleet.playerid = userid;
 
-			console.log(fleet);
-			$("#fleetCreationDiv").remove();
-
-			selectedHex.contains.push(fleet);
-			this.fleetActions.push(fleet);
-			this.selected = [];
-			this.ships = [];
-			updateGUI(selectedHex);
+			ajax.createNewFleet(fleet);
 		}
 		else {
 			alert("enter fleet name");
 		}
 	}
 
+	this.finishNewFleetCreation = function(id, item){
+		$("#fleetCreationDiv").remove();
+
+		item = JSON.parse(item);
+		var fleet = new Fleet(id, item.location, item.name);
+
+		selectedHex.contains.push(fleet);
+		this.selected = [];
+		this.ships = [];
+		updateGUI(selectedHex);
+	}
+
 	this.deleteFleet = function(){
+
+		console.log("ding");
 		for (var i = 0; i < selectedHex.contains.length; i++){
 			if (selectedHex.contains[i] instanceof Fleet){
 				if (selectedHex.contains[i].id == selectedFleet.id ){
-					var fleet = selectedFleet;
-						fleet.action = "disband";
-					this.fleetActions.push(fleet);
 
+					ajax.deleteEmptyFleet(selectedFleet);
+					selectedFleet = null;
 					selectedHex.contains.splice(i, 1);
 					break;
 				}

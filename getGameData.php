@@ -13,14 +13,15 @@ session_start();
 if (isset($_SESSION["userid"]) && isset($_SESSION["gameid"])){
 
 
-
 	$dbManager = DBManager::app();
 	$manager = new Manager($_SESSION["userid"], $_SESSION["gameid"]);
 	$gameid = $_SESSION["gameid"];
 
-//	Debug::log("get game: ".$gameid);
 		
 	if (isset($_GET["type"])){
+	
+		$_SESSION["turn"] = $dbManager->getCurrentTurn($_SESSION["userid"]);
+	
 		if ($_GET["type"] == "status"){
 			$status = $dbManager->getGameStatus(
 												$_GET["gameid"],
@@ -38,7 +39,7 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["gameid"])){
 			echo JSON_encode($planets, JSON_NUMERIC_CHECK);
 		}
 		else if ($_GET["type"] == "gates"){
-			$gates = $manager->getGates();
+			$gates = $manager->getGatesAndLanes();
 			echo JSON_encode($gates, JSON_NUMERIC_CHECK);
 		}
 		else if ($_GET["type"] == "lanes"){
@@ -48,6 +49,10 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["gameid"])){
 		else if ($_GET["type"] == "fleets"){
 			$fleets = $manager->getFleets();
 			echo JSON_encode($fleets, JSON_NUMERIC_CHECK);
+		}
+		else if ($_GET["type"] == "validLanes"){
+			$validLanes = $manager->getValidLanesForFleets($_SESSION["turn"]);
+			echo JSON_encode($validLanes, JSON_NUMERIC_CHECK);
 		}
 		else if ($_GET["type"] == "ships"){
 			$ships = $manager->getShips();

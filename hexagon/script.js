@@ -69,8 +69,6 @@ var userid;
 var gameid;
 
 
-var background_icon = new Image();
-	background_icon.src = "img/background.jpg";
 var jumpgate_icon = new Image();
 	jumpgate_icon.src = "img/jumpgate.png";
 
@@ -110,11 +108,11 @@ for (var i = 0; i < types.length; i++){
 
 
 function updateGUI(hex){
+
 	var fleetFound = false;
 
 	var div = document.getElementById("gui");
 		div.innerHTML = "";
-
 	
 	var table = document.createElement("table");
 		table.style.border = "none";
@@ -125,31 +123,39 @@ function updateGUI(hex){
 
 		tr.appendChild(th);
 		table.appendChild(tr);
+		
+	
+	if (! hex.visible){
+		return;
+	}
 
-	if (hex.specials.length > 0){
+	for (var i = 0; i < hex.specials.length; i++){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.style.border = "none";
-			td.innerHTML = "<font color = 'red'>" + hex.specials[0].type + "</font>";
+			td.innerHTML = "<font color = 'red'>" + hex.specials[i].type + "</font>";
 	
 		tr.appendChild(td);
 		table.appendChild(tr);
-	}
+	}	
 
 	div.appendChild(table);
-		
+	
+
 	for (var i = 0; i < hex.contains.length; i++){
 
 		if (hex.contains[i] instanceof Jumpgate){
 
-			var target = hex.contains[i].lane.path[hex.contains[i].lane.path.length-1];
+			var lane = hex.contains[i].lane
+			var targetHex = lane.path[hex.contains[i].lane.path.length-1];
+				console.log(hex.contains[i].lane)
 
 			var table = document.createElement("table");
 				table.id = hex.contains[i].id + "jumpgate";
 				table.className = "jumpgateTable";
 
-				$(table).data("targetX", target[0]);
-				$(table).data("targetY", target[1]);
+				$(table).data("targetX", targetHex[0]);
+				$(table).data("targetY", targetHex[1]);
 				table.addEventListener("mouseenter", function(){
 					var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
 						goal.checkHighlight();
@@ -163,7 +169,7 @@ function updateGUI(hex){
 				var tr = document.createElement("tr");
 
 					var th = document.createElement("th");				
-						th.innerHTML = "Jumpgate" + " #" + hex.contains[i].id;
+						th.innerHTML = "Jumpgate" + " #" + hex.contains[i].id + ", Lane #" + lane.id;
 					tr.appendChild(th);				
 								
 					var th = document.createElement("th");	
@@ -173,14 +179,12 @@ function updateGUI(hex){
 				
 					var th = document.createElement("th");
 				//		th.innerHTML = "<td>" + target + " (id: " + lane.id + ")</td>";
-						th.innerHTML = "<td>" + target + "</td>";
+						th.innerHTML = "<td>" + targetHex + "</td>";
 			
 					tr.appendChild(th);
 
 				table.appendChild(tr)	
-
 		}
-		
 		else if (hex.contains[i] instanceof Planet){
 
 			var icon = hex.contains[i].icon;
@@ -211,12 +215,20 @@ function updateGUI(hex){
 				th.colSpan = 2;
 
 			if (hex.contains[i].name != "undefined"){
+
 				th.innerHTML = "Planet " + hex.contains[i].name + " (" + "id: " + hex.contains[i].id + ")";
-				$(th).data("id", hex.contains[i].id);
-				th.addEventListener("contextmenu", function(e){
-					e.preventDefault();
-					createRenameElement(e, "planet", $(this).data("id"))
-				});
+
+				if (hex.contains[i].owner == userid){
+					th.style.color = "green";
+					$(th).data("id", hex.contains[i].id);
+					th.addEventListener("contextmenu", function(e){
+						e.preventDefault();
+						createRenameElement(e, "planet", $(this).data("id"))
+					});
+				}
+				else {
+					th.style.color = "red";
+				}
 
 				tr.appendChild(th);
 				table.appendChild(tr);
@@ -380,9 +392,9 @@ function updateGUI(hex){
 			}	
 		}
 		else if (hex.contains[i] instanceof Fleet){
+		
 			fleetFound = true;
 			var keys = ["size", "model", "name", "elint", "scanner", "jumpdrive"];
-
 
 			var table = document.createElement("table");
 				table.id = "fleet" + hex.contains[i].id;
@@ -392,127 +404,240 @@ function updateGUI(hex){
 			
 			var th = document.createElement("th");
 				th.colSpan = keys.length+1;
-				th.innerHTML = "Fleet: " + hex.contains[i].name + " (id: " + hex.contains[i].id + ")";
-				$(th).data("id", hex.contains[i].id);
-				th.addEventListener("contextmenu", function(e){
-					e.preventDefault();
-					createRenameElement(e, "fleet", $(this).data("id"));
-				})
+				th.innerHTML += "Fleet: " + hex.contains[i].name + " (id: " + hex.contains[i].id + "), owner: " + hex.contains[i].owner;
+				
+				if (hex.contains[i].owner == userid){
+					th.style.color = "green";
+					$(th).data("id", hex.contains[i].id);
+					th.addEventListener("contextmenu", function(e){
+						e.preventDefault();
+						createRenameElement(e, "fleet", $(this).data("id"));
+					})
+				}
+				else {
+					th.style.color = "red";
+				}
 			tr.appendChild(th);
 			table.appendChild(tr);
 
-
-			var tr = document.createElement("tr");
-
-			for (var l = 0; l < keys.length; l++){
-				var td = document.createElement("td");
-					td.style.borderBottom = "1px solid white";
-					td.innerHTML = keys[l].toUpperCase(0, 1);
-
-				tr.appendChild(td);
-			}
-			table.appendChild(tr);
-
+			if (hex.contains[i].owner == userid){
+				if (hex.contains[i].validLanes.length){
+					for (var m = 0; m < hex.contains[i].validLanes.length; m++){
+					//	var laneOriginHex = grid.getLaneOriginInRadiusByLaneId(hex, hex.contains[i].validLanes[m]);
+						//console.log(laneOriginHex);
 						
-			for (var j = 0; j < hex.contains[i].ships.length; j++){
-				var tr = document.createElement("tr");
-					$(tr).data("shipid", hex.contains[i].ships[j].id);
-					$(tr).data("fleetid", hex.contains[i].id);
+						var laneOriginHex = grid.getHexByIndex(hex.contains[i].validLanes[m].loc);
+												
+						var tr = document.createElement("tr");
+						var td = document.createElement("td");
+							td.colSpan = keys.length+1;
+							td.innerHTML += "Valid for lane # " + hex.contains[i].validLanes[m].laneid + " from: ";
+							
+						for (var l = 0; l < laneOriginHex.contains.length; l++){
+							if (laneOriginHex.contains[l] instanceof Jumpgate){
+								if (laneOriginHex.contains[l].lane.id == hex.contains[i].validLanes[m].laneid){
+									
+									td.innerHTML += laneOriginHex.contains[l].lane.path[0];
+									td.innerHTML += " to ";
+									td.innerHTML += laneOriginHex.contains[l].lane.path[laneOriginHex.contains[l].lane.path.length-1];
 
-					tr.addEventListener("click", function(e){
-						e.stopPropagation();
-						if (! selectedFleet){
-						//	console.log($(this).data());
-							if ( $(this).hasClass("shipSelected") ){
-								$(this).removeClass("shipSelected");
-								transfer.removeShip($(this).data());
-							}
-							else {
-								$(this).addClass("shipSelected");
-								transfer.addShip($(this).data());
+									tr.appendChild(td);
+									$(tr).data("x1", laneOriginHex.contains[l].lane.path[0][0]);
+									$(tr).data("y1", laneOriginHex.contains[l].lane.path[0][1]);
+									$(tr).data("x2", laneOriginHex.contains[l].lane.path[laneOriginHex.contains[l].lane.path.length-1][0]);
+									$(tr).data("y2", laneOriginHex.contains[l].lane.path[laneOriginHex.contains[l].lane.path.length-1][1]);
+									$(tr).data("laneid", hex.contains[i].validLanes[m].laneid);
+									
+									tr.addEventListener("mouseenter", function(){
+										var origin = grid.getHexByIndex( [$(this).data("x1"), $(this).data("y1")] );
+											origin.checkLaneHighlight( $(this).data("laneid"), jumpCtx);
+										
+									});
+									tr.addEventListener("mouseleave", function(){
+										var origin = grid.getHexByIndex( [$(this).data("x1"), $(this).data("y1")] );
+											origin.checkLaneHighlight( $(this).data("laneid"), jumpCtx);
+										
+									});
+
+
+
+									table.appendChild(tr);
+									
+									break;
+									
+								}
 							}
 						}
-					});
-					tr.addEventListener("contextmenu", function(e){
-						e.stopPropagation();
-						e.preventDefault();
-						createRenameElement(e, "ship", $(this).data("shipid"));
-					});
+					}
+				}
 
+				var tr = document.createElement("tr");
 
 				for (var l = 0; l < keys.length; l++){
 					var td = document.createElement("td");
-						td.innerHTML = hex.contains[i].ships[j][keys[l]];
+						td.style.borderBottom = "1px solid white";
+						td.innerHTML = keys[l].toUpperCase(0, 1);
 
 					tr.appendChild(td);
 				}
 				table.appendChild(tr);
-			}
-			
-			var tr = document.createElement("tr");
-			
-			var td = document.createElement("td");
-				td.className = "disabled";
-				td.colSpan = keys.length+1
-				td.style.backgroundColor = "red"
-				td.id = "moveFleet" + hex.contains[i].id;
-				td.style.cursor = "pointer";
-				td.style.textAlign = "center";
-				td.innerHTML = "Plan Movement";
-				td.addEventListener("click", moveorderClick);
+
+							
+				for (var j = 0; j < hex.contains[i].ships.length; j++){
+					var tr = document.createElement("tr");
+						$(tr).data("shipid", hex.contains[i].ships[j].id);
+						$(tr).data("fleetid", hex.contains[i].id);
+
+						tr.addEventListener("click", function(e){
+							e.stopPropagation();
+							if (! selectedFleet){
+							//	console.log($(this).data());
+								if ( $(this).hasClass("shipSelected") ){
+									$(this).removeClass("shipSelected");
+									transfer.removeShip($(this).data());
+								}
+								else {
+									$(this).addClass("shipSelected");
+									transfer.addShip($(this).data());
+								}
+							}
+						});
+						tr.addEventListener("contextmenu", function(e){
+							e.stopPropagation();
+							e.preventDefault();
+							createRenameElement(e, "ship", $(this).data("shipid"));
+						});
+
+
+					for (var l = 0; l < keys.length; l++){
+						var td = document.createElement("td");
+							td.innerHTML = hex.contains[i].ships[j][keys[l]];
+
+						tr.appendChild(td);
+					}
+					table.appendChild(tr);
+				}
 				
-			tr.appendChild(td);
-			table.appendChild(tr);
-			
-			for (var k = 0; k < moveManager.orders.length; k++){
-				if (hex.contains[i].id == moveManager.orders[k].fleetId){
-					if (moveManager.orders[k].moves[0] == hex.id){
-						continue;
+				var tr = document.createElement("tr");
+				
+				var td = document.createElement("td");
+					td.className = "disabled";
+					td.colSpan = keys.length+1
+					td.style.backgroundColor = "red"
+					td.id = "moveFleet" + hex.contains[i].id;
+					td.style.cursor = "pointer";
+					td.style.textAlign = "center";
+					td.innerHTML = "Plan Movement";
+					td.addEventListener("click", moveorderClick);
+					
+				tr.appendChild(td);
+				table.appendChild(tr);
+				
+				for (var k = 0; k < moveManager.orders.length; k++){
+					if (hex.contains[i].id == moveManager.orders[k].fleetid){
+						if (moveManager.orders[k].moves[0] == hex.id){
+							continue;
+						}
+
+						var tr = document.createElement("tr");
+						var td = document.createElement("td");
+							$(td).data("targetX", moveManager.orders[k].moves[moveManager.orders[k].moves.length-1][0]);
+							$(td).data("targetY", moveManager.orders[k].moves[moveManager.orders[k].moves.length-1][1]);
+							td.addEventListener("mouseenter", function(){
+								var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
+									goal.checkHighlight();
+							});
+							
+							td.addEventListener("mouseleave", function(){
+								var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
+									goal.checkHighlight();
+							});
+						
+							td.className = "centerText";
+							td.colSpan = 6;
+
+							var html = moveManager.orders[k].moves[moveManager.orders[k].moves.length-1];	
+
+							td.innerHTML = "<font color = 'red'> Moving to: " + html + "</font>";
+							
+							tr.appendChild(td);
+							table.appendChild(tr);
+						
+						
+						var tr = document.createElement("tr");
+						var td = document.createElement("td");						
+							td.className = "centerText";
+							td.colSpan = 6;
+
+							var html = moveManager.orders[k].getTotalHMP();
+
+							td.innerHTML = "<font color = 'red'>Required HMP: " + html + "</font>";						
+							tr.appendChild(td);
+							table.appendChild(tr);
+					}
+				}
+				table.addEventListener("click", fleetTableClick);
+			}
+			else {
+				if (hex.visible == 2){
+
+					var type = [];
+					var amount = [];
+
+					for (var j = 0; j < hex.contains[i].ships.length; j++){
+						var found = false;
+
+
+						if (type.length == 0){
+							type.push(hex.contains[i].ships[j].size);
+							amount.push(1);
+						}
+						else {
+							for (var k = 0; k < type.length; k++){
+								if (type[k] == hex.contains[i].ships[j].size){
+									found = true;
+									amount[k]++;
+								}
+								else if (k == type.length-1 && found == false){
+									type.push(hex.contains[i].ships[j].size);
+									amount.push(1);
+									break;
+								}
+							}
+						}
 					}
 
-					var tr = document.createElement("tr");
-					var td = document.createElement("td");
-						$(td).data("targetX", moveManager.orders[k].moves[moveManager.orders[k].moves.length-1][0]);
-						$(td).data("targetY", moveManager.orders[k].moves[moveManager.orders[k].moves.length-1][1]);
-						td.addEventListener("mouseenter", function(){
-							var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
-								goal.checkHighlight();
-						});
-						
-						td.addEventListener("mouseleave", function(){
-							var goal = grid.getHexById([$(this).data("targetX"), $(this).data("targetY")]);
-								goal.checkHighlight();
-						});
-					
-						td.className = "centerText";
-						td.colSpan = 6;
+					if (type.length){
 
-						var html = moveManager.orders[k].moves[moveManager.orders[k].moves.length-1];	
+							var tr = document.createElement("tr");
+							var th = document.createElement("th");
+								th.innerHTML = "Amount";
+							tr.appendChild(th);
 
-						td.innerHTML = "<font color = 'red'> Moving to: " + html + "</font>";
-						
-						tr.appendChild(td);
-						table.appendChild(tr);
-					
-					
-					var tr = document.createElement("tr");
-					var td = document.createElement("td");						
-						td.className = "centerText";
-						td.colSpan = 6;
+							var th = document.createElement("th");
+								th.innerHTML = "Classification";
+							tr.appendChild(th);
+							table.appendChild(tr);
 
-						var html = moveManager.orders[k].getTotalHMP();
-
-						td.innerHTML = "<font color = 'red'>Required HMP: " + html + "</font>";						
-						tr.appendChild(td);
-						table.appendChild(tr);
+						for (var l = 0; l < type.length; l++){
+							var tr = document.createElement("tr");
+							var td = document.createElement("td");
+								td.style.width = "20%";
+								td.innerHTML = amount[l];
+							tr.appendChild(td);
+							var td = document.createElement("td");
+								td.style.width = "30%";
+								td.innerHTML = type[l];
+							tr.appendChild(td);
+							table.appendChild(tr);
+						}
+					}
 				}
-			}
-			table.addEventListener("click", fleetTableClick);
-		}	
+			}					
+		}
 		
 		div.appendChild(table);
 	}
-
 
 	if (fleetFound){
 		var table = document.createElement("table");
@@ -646,20 +771,23 @@ function drawCenter(){
 }
 
 function createHexGrid(){
-	
+	//console.time("create");
 	if (!grid){
 		grid = new Grid(hexCanvas.width, hexCanvas.height);
 	}
+	//console.timeEnd("create");
 }
 
 function drawHexGrid(){
 	
 	// console.log("draw with offset: " + cam.offSet.x + " / " + cam.offSet.y + ", zoom: " + cam.zoom);
 	
+	//	console.time("draw");
 	for (var h in grid.hexes){
 		grid.hexes[h].draw(hexCtx);
 		grid.hexes[h].drawContent(objCtx);
 	}
+	//	console.timeEnd("draw");
 			
 	moveManager.drawCurrentOrders(moveCtx);
 }
@@ -672,14 +800,7 @@ function drawHex(hex){
 	
 function endTurn(){
 	if (gamedata.canCommit){
-		var moves = [];
-			
-		for (var i = 0; i < moveManager.orders.length; i++){
-			var move = moveManager.orders[i];
-			moves.push(move);
-		}
-		
-		ajax.commitMoves(moves);
+		ajax.confirmEndTurn()
 	}
 	else {
 		alert("you cant do dis bra");

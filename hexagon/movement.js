@@ -21,6 +21,7 @@ function MovementManager(){
 	this.unsetAdjacent = function(){
 		for (var i = 0; i < this.adjacent.length; i++){
 			this.adjacent[i].validForMove = false;
+			console.log(this.adjacent[i].id);
 			this.adjacent[i].draw(hexCtx);
 		}
 		
@@ -47,6 +48,7 @@ function MovementManager(){
 		console.log("checkForValidMove");
 		if (hex.validForMove){
 			if (this.currentHex.hasJumpgate){
+				console.log("this.currentHex.hasJumpgate")
 				this.getPossibleLanes(hex);
 
 				if (this.possibleLanes.length){
@@ -54,11 +56,22 @@ function MovementManager(){
 					var onLane = false;
 
 					for (var i = 0; i < this.possibleLanes.length; i++){
-						if (isEqual(this.possibleLanes[i].path[1], hex.id)){
-							this.onLane = true;
-							onLane = true;
-							this.steps = 0;
-							console.log("jumping onto lane");
+					
+						if (this.possibleLanes[i] instanceof Lane){
+							if (isEqual(this.possibleLanes[i].path[1], hex.id)){
+								this.onLane = true;
+								onLane = true;
+
+								selectedFleet.validLanes.push(
+																{
+																	laneid: this.possibleLanes[i].id,
+																	loc: this.possibleLanes[i].path[0]
+																} 
+															);
+								
+								this.steps = 0;
+								console.log("jumping onto lane");
+							}
 						}
 					}
 
@@ -70,43 +83,61 @@ function MovementManager(){
 					this.onLane = false;
 					console.log("move off lane");
 				}
-
-
-				this.pickMovement(hex);
 			}
-			else if (this.possibleLanes.length){
-				console.log("else if")
+			else if (this.activeFleet.validLanes.length){
+				console.log("this.activeFleet.validLanes.length")
 
-				var newValidLanes = [];
+				var legal = [];
 
-				for (var i = 0; i < this.possibleLanes.length; i++){
-					if (isEqual(this.possibleLanes[i].path[this.steps+1], hex.id)){
-						console.log("on lane true");
-						this.onLane = true;
-						newValidLanes.push(this.possibleLanes[i]);
+
+				for (var i = 0; i < this.activeFleet.validLanes.length; i++){
+					var laneid = this.activeFleet.validLanes[i].laneid;
+				//	var laneOriginHex = grid.getLaneOriginInRadiusByLaneId(this.currentHex, laneid);
+					var laneOriginHex = grid.getHexByIndex(this.activeFleet.validLanes[i].loc);
+					var lane = laneOriginHex.getLaneById(laneid).lane;
+
+					var index;
+
+					for (var j = 0; j < lane.path.length-1; j++){
+						if (isEqual(lane.path[j], this.currentHex.id)){
+							index = j;
+							break;
+						}
+					}
+
+					if (index){
+						if (index >= 1 && index < lane.path.length){
+							if (
+								isEqual(lane.path[index-1], hex.id)
+								||
+								isEqual(lane.path[index+1], hex.id)
+								)
+								{							
+									legal.push(this.activeFleet.validLanes[i]);
+								}
+						}
 					}
 				}
 
-				this.possibleLanes = newValidLanes
-					console.log(this.possibleLanes);
-
-				if (! this.possibleLanes.length){
-					console.log("empty up");
-					this.onLane = false;
-					this.possibleLanes = [];
+				if (legal.length){
+					this.possibleLanes = legal;
+					selectedFleet.validLanes = legal;
+					this.onLane = true;
 				}
-
-				this.pickMovement(hex);
+				else {
+					this.onLane = false;
+				}
 			}
 			else {
-				//console.log("else")
-				this.onLane = false;;
-				this.pickMovement(hex);
+				console.log("else")
+				this.onLane = false;
 			}
+
+			this.pickMovement(hex);
 		}
 	}
-	
-	
+
+
 	this.getPossibleLanes = function(hex){
 		console.log("getPossibleLanes");
 
@@ -120,31 +151,36 @@ function MovementManager(){
 	}
 	
 	this.pickMovement = function(hex, type){
-		console.log("pickMovement");
-
+		//console.log("pickMovement");
+		
 		this.steps++;
 
 		if (this.onLane){
-		console.log("moving on Lane");
+			//console.log("moving on Lane");
 			this.requiredHMP.push(1);
 		}
-		else {
-		console.log("moving off Lane");
+		else if (this.activeFleet.hasJumpEngine()){
+			//console.log("moving off Lane /w JE");
 			this.requiredHMP.push(3);
 		}
+		else {
+			//console.log("moving off Lane /wo JE")
+			this.requiredHMP.push(24);
+		}
 		
+		console.log(this.adjacent);
+		this.chosenMoves.push(hex);	
 		this.drawSingleMovement(hex);
-		this.chosenMoves.push(hex);		
-		this.currentHex = hex;		
-		this.continuePathing();
-	}
-	
-	this.continuePathing = function(){
-		console.log("continuePathing");
+
 		this.unsetAdjacent();
+		this.currentHex = hex;
+		console.log(this.adjacent);
+
 		this.adjacent = this.currentHex.getAdjacent();
 		this.setAdjacent();
+		console.log(this.adjacent);
 	}
+	
 
 	this.checkMovementType = function(hex){
 		console.log("checkMovementType");
@@ -156,28 +192,13 @@ function MovementManager(){
 	
 		return "normal";
 	}
-	
-	this.travelsAlongJumpLane = function(hex){
-		console.log("ding");
-		var steps = this.chosenMoves.length;
-		
-		for (var i = 0; i < this.origin.lanes.length-1; i++){
-			if (this.origin.lanes[i].path[steps+1][0] != hex.id[0] || this.origin.lanes[i].path[steps+1][1] != hex.id[1]){
-				console.log("on lane");
-				return false
-			}
-			else console.log("off lane");
-		}
-			return true;
-	}
-
 
 	
 	this.checkForOrderUndraw = function(){
 		var redraw = false;
 		
 		for (var i = 0; i < this.orders.length; i++){
-			if (this.orders[i].fleetId == this.activeFleet.id){
+			if (this.orders[i].fleetid == this.activeFleet.id){
 				this.orders.splice(i, 1);
 				redraw = true;
 			}
@@ -204,7 +225,7 @@ function MovementManager(){
 								);
 				}
 				
-				moveCtx.strokeStyle = "lightGreen";
+				moveCtx.strokeStyle = "red";
 				moveCtx.lineWidth = 2 * cam.zoom;
 				moveCtx.stroke();
 			}
@@ -214,7 +235,7 @@ function MovementManager(){
 	this.drawSingleMovement = function(target){
 //	console.log("drawSingleMovement");
 		var origin = this.currentHex;
-		moveCtx.strokeStyle = "lightGreen";
+		moveCtx.strokeStyle = "red";
 		moveCtx.lineWidth = 2 * cam.zoom;
 		
 		moveCtx.beginPath();
@@ -232,11 +253,12 @@ function MovementManager(){
 	}
 	
 	this.drawCurrentOrders = function(ctx){
+//	console.log(this.orders);
 //	console.log("drawCurrentOrders");
 		for (var i = 0; i < this.orders.length; i++){
 			var origin = grid.getHexById([this.orders[i].origin[0], this.orders[i].origin[1]]);
 			
-			moveCtx.strokeStyle = "lightGreen";
+			moveCtx.strokeStyle = "red";
 			moveCtx.lineWidth = 2 * cam.zoom;
 			
 			moveCtx.beginPath();
@@ -262,17 +284,23 @@ function MovementManager(){
 	this.confirmCurrentMovementPlan = function(){
 		this.unsetAdjacent();
 		
+		if (! this.onLane){
+			this.possibleLanes = [];
+		}
+		
+		
 		if (this.chosenMoves.length > 0){
-			var order = new MovementOrder(this.activeFleet.id, this.chosenMoves, this.origin.id, this.requiredHMP, currentTurn);
+			var order = new MovementOrder(this.activeFleet.id, this.chosenMoves, this.origin.id, this.requiredHMP, this.possibleLanes, currentTurn);
 			this.activeFleet.currentOrder = order;
 		}
 		else {
 			var order = {
-				fleetId: this.activeFleet.id,
+				fleetid: this.activeFleet.id,
 				moves: [selectedHex.id],
 				origin: selectedHex.id,
 				cancel: true,
-				turn: currentTurn
+				turn: currentTurn,
+				validLanes: this.possibleLanes
 			}
 		}
 
@@ -283,9 +311,7 @@ function MovementManager(){
 
 
 		this.activeFleet = false;
-		selectedFleet = null;
-		
-	//	console.log(selectedHex);
+		selectedFleet = null;		
 		selectedHex.drawLanes(jumpCtx);
 		updateGUI(selectedHex);
 	}

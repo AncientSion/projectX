@@ -89,6 +89,15 @@ function Admin(){
 				}
 
 
+				for (var i = 0; i < 3; i++){
+					var tr = document.createElement("tr");
+					var td = document.createElement("td");
+						td.innerHTML = "<input type='form' placeholder='free entry here'></input>",
+					tr.appendChild(td);
+					table.appendChild(tr);
+				}
+
+
 			var tr = document.createElement("tr");
 			var td = document.createElement("td");
 			var input = document.createElement("input");
@@ -115,12 +124,22 @@ function Admin(){
 	}
 
 	this.createSector = function(){
-		var table = $("#sectorCreationTable")
+		var table = $("#sectorCreationTable");
+
+
 		var sector = {
 			gameid: gameid,
 			loc: table.data("loc"),
 			specials: this.sectorSpecials
 		}
+
+		for (var i = 8; i < 11; i++){
+			var val = table[0].childNodes[i].childNodes[0].childNodes[0].value;
+			if (val.length > 2){
+				sector.specials.push(val);
+			}
+		}
+	
 
 		$("#sectorCreationDiv").remove();
 		this.sectors.push(sector);
@@ -128,7 +147,6 @@ function Admin(){
 		this.activePopUp = false;
 
 		if (this.sectors.length > 0){
-			console.log("ding");
 			document.getElementById("logSectors").className = "";
 			document.getElementById("commitSectors").className = "";
 		}
@@ -312,14 +330,11 @@ function Admin(){
 		if (this.currentLane.length == 0){
 			this.currentLane.push(hex.id);
 		}	
-		else if (this.currentLane.length < 6){
+		else {
 			document.getElementById("endCurrentLane").className = "";
 			if (! isEqual(this.currentLane[this.currentLane.length-1], hex.id)) {
 				this.currentLane.push(hex.id);
 			}
-		}
-		else {
-			alert("max size reached");
 		}
 	}				
 	
@@ -332,7 +347,7 @@ function Admin(){
 	this.commitLanes = function(){
 		if (this.gateLaneItems.length > 0){
 			ajax.postGateAndLane(this.gateLaneItems);
-		//	this.gateLaneItems = [];
+			this.gateLaneItems = [];
 		}
 		else {
 			alert("no lanes in queue");
@@ -1054,14 +1069,16 @@ function Admin(){
 
 
 		var th = document.createElement("th");
-			th.innerHTML = "Select which Jumpgate to kill:";
+			th.innerHTML = "Select which Gates + Route to kill:";
 			tds.push(th);
 
 
 		for (var i = 0; i < gates.length; i++){
 			var td = document.createElement("td");
-				td.innerHTML = "Jumpgate ID: " + gates[i].id;
-				$(td).data("id", gates[i].id);
+				td.innerHTML = "Jumpgate ID: " + gates[i].id + " connected to:" + gates[i].lane.path[gates[i].lane.path.length-1];
+				$(td).data("laneid", gates[i].lane.id);
+				$(td).data("startgate", gates[i].lane.id);
+				$(td).data("endgate", gates[i].lane.id);
 				td.addEventListener("click", function(){
 					if ($(this).hasClass("gateSelected")){
 						$(this).removeClass("gateSelected");
@@ -1083,26 +1100,32 @@ function Admin(){
 		}
 
 		var tr = document.createElement("tr");
-			tr.innerHTML = "<td><input type='button' value='confirm' onclick='admin.killGate()'</input></td>";
+			tr.innerHTML = "<input type='button' value='confirm' onclick='admin.killLane()'</input>";
+			tr.innerHTML += "<input type='button' value='cancel' onclick='admin.cancelKillLane()'</input>";
 		table.appendChild(tr);
 
 		document.body.appendChild(table);
 	},
 
-	this.killGate = function(){
+	this.cancelKillLane = function(){
+		var div = document.getElementById("gateKillDiv");
+			$(div).remove();
+	}
+
+	this.killLane = function(){
 		var div = document.getElementById("gateKillDiv");
 		var rows = div.getElementsByTagName("td");
-		var gates = [];
+		var lane;
 
 		for (var i = 0; i < rows.length; i++){
 			if (rows[i].className == "gateSelected"){
-				gates.push($(rows[i]).data("id"));
+				lane = $(rows[i]).data("laneid");
 			}
 		}
 
 		$(div).remove();
 
-		ajax.killGates(gates);
+		ajax.killLane(lane);
 
 	},
 

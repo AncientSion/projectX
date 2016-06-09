@@ -38,6 +38,8 @@ Hexagon = function(x, y, size){
 	this.specials = [];
 	this.markers = [];
 	
+	this.visible = 0;
+	
 	this.create = function(){
 		this.points = [];
 	
@@ -105,19 +107,69 @@ Hexagon.prototype.showHoverDiv = function(pos){
 }
 
 
+
 Hexagon.prototype.hideHoverDiv = function(){
 	this.hover.className = "hoverDiv disabled";
 	activeHover = false;
 }
+
+Hexagon.prototype.setVisibility = function(){	
+
+	var sight = 0;
+	/*
+	0: keine Sicht
+	1: nur Hex
+	2: Elint (Umkreis 1 + Details);
+	*/
 	
+	for (var i = 0; i < this.contains.length; i++){
+		if (this.contains[i].owner == userid){
+			if (this.contains[i] instanceof Fleet){
+				if (this.contains[i].hasElint()){
+					sight = 2;
+					break;
+				}
+				else {
+					sight = 1;
+				}
+			}
+			else if (this.contains[i] instanceof Planet){		
+					sight = 1;
+			}
+			else if (this.contains[i] instanceof Jumpgate){
+					sight = 1;
+			}
+		}
+	}
+
+
+
+	if (sight){
+		if (this.visible < sight){
+			this.visible = sight;
+
+			var adjacent = this.getAdjacent();
+
+			if (sight > 1){
+				for (var j = 0; j < adjacent.length; j++){
+					if (! adjacent[j].visible){
+						adjacent[j].visible = sight;
+					}
+				}
+			}
+		}
+	}
+}
+
 Hexagon.prototype.draw = function(ctx){
+
 
 	if (this.selected){
 		ctx.strokeStyle = "red";
 		ctx.lineWidth = 1;
 	} 
 	else {
-		ctx.strokeStyle = "grey";
+		ctx.strokeStyle = "white";
 	}
 	
 	ctx.lineWidth = 1;
@@ -134,18 +186,22 @@ Hexagon.prototype.draw = function(ctx){
 		ctx.lineTo(p.x + cam.offSet.x, p.y + cam.offSet.y);
 	}
 	ctx.closePath();
-
 	
-	if (this.selected == 1){
-		ctx.fillStyle = "grey";
-		ctx.fill();
-	}
-	else if (this.validForMove == true){
+
+	if (this.validForMove == true){
 		ctx.fillStyle = "red";
 		ctx.fill();
 	}
 	else if (this.highlight == true){
-		ctx.fillStyle = "darkCyan";
+		ctx.fillStyle = "red";
+		ctx.fill();
+	}
+	else if (! this.visible){
+		ctx.fillStyle = "black";
+		ctx.fill();
+	}
+	else if (this.selected == 1){
+		ctx.fillStyle = "grey";
 		ctx.fill();
 	}
 	else {
@@ -156,25 +212,75 @@ Hexagon.prototype.draw = function(ctx){
 	
 	ctx.globalCompositeOperation = "source-over";
 	ctx.stroke();
-				
+			
 };
 
+
 Hexagon.prototype.checkHighlight = function(){
+
 	if (this.highlight){
-		this.highlight = false;			
+		this.highlight = false;
 	}
 	else {
 		this.highlight = true;		
 	}
-	
 	this.draw(hexCtx);
-//console.log(this.highlight);
+}
+
+Hexagon.prototype.checkLaneHighlight = function(laneid, ctx){
+
+	for (var i = 0; i < this.contains.length; i++){
+		if (this.contains[i] instanceof Jumpgate) {
+			if (this.contains[i].lane.id == laneid) {
+				if (! this.contains[i].lane.highlight) {
+					this.contains[i].lane.highlight = true;
+				//	ctx.clearRect(0, 0, width, height) 
+					ctx.beginPath();
+					ctx.moveTo(
+							this.center.x + cam.offSet.x,
+							this.center.y + cam.offSet.y
+							);
+							
+						//	console.log( (this.center.x + cam.offSet.x) + " / " + (this.center.y + cam.offSet.y) );
+							
+					
+					for (var j = 1; j < this.contains[i].lane.path.length; j++){
+						var hex = grid.getHexById(this.contains[i].lane.path[j]);
+				//		console.log(hex.id);
+						
+							ctx.lineTo(
+								hex.center.x + cam.offSet.x,
+								hex.center.y + cam.offSet.y
+							);
+							
+						//	console.log( (hex.center.x + cam.offSet.x) + " / " + (hex.center.y + cam.offSet.y) );
+
+					}
+					
+					ctx.lineWidth = 5 * cam.zoom;
+					ctx.strokeStyle = "darkcyan";
+					ctx.stroke();
+				}
+				else {
+					this.contains[i].lane.highlight = false;
+					ctx.clearRect(0, 0, width, height) 
+				}
+			}
+		}
+	}
 }
 				
 Hexagon.prototype.drawContent = function(ctx){
 
+	this.drawID(ctx);
+
+	if (! this.visible){
+		return false;
+	}
+
 	var planet = false;
-	var fleets = 0;
+	var friendFleets = 0;
+	var hostileFleets = 0;
 	var specials = false
 
 	for (var i = 0; i < this.contains.length; i++){
@@ -182,7 +288,12 @@ Hexagon.prototype.drawContent = function(ctx){
 			planet = this.contains[i];
 		}
 		else if (this.contains[i] instanceof Fleet){
-			fleets++;
+			if (this.contains[i].owner == userid){
+				friendFleets++;
+			}
+			else {
+				hostileFleets++;
+			}
 		}
 	}
 
@@ -190,7 +301,7 @@ Hexagon.prototype.drawContent = function(ctx){
 
 
 
-	if (this.specials.length > 0){
+	if (this.specials.length > 0 && this.specials[0].icon != undefined){
 		var size = this.size;
 		var iconSize = this.specials[0].icon.width;
 		var newSize = iconSize / 3  * cam.zoom;
@@ -203,20 +314,18 @@ Hexagon.prototype.drawContent = function(ctx){
 					);
 	}
 
-
 	if (planet){
 		var size = this.size;
 		var newSize = 100 / 6 * cam.zoom;
 
 		ctx.drawImage(
 					planet.icon,
-					this.center.x + cam.offSet.x - newSize/2,
+					this.center.x + cam.offSet.x - newSize/1.75,
 					this.center.y + cam.offSet.y + newSize/8,
 					newSize,
 					newSize
 					);
 	}
-	
 	
 	if (this.hasJumpgate){
 		var size = this.size;
@@ -225,58 +334,51 @@ Hexagon.prototype.drawContent = function(ctx){
 		
 		ctx.drawImage(
 					jumpgate_icon,
-					this.center.x + cam.offSet.x - newSize/2 - size/2,
+					this.center.x + cam.offSet.x - newSize/2 - size/1.75,
 					this.center.y + cam.offSet.y - newSize/2,
 					newSize,
 					newSize
 					);
-		
 	
-	/*	ctx.beginPath();
+	}
+	
+	
+	if (friendFleets > 0){
+		ctx.beginPath();
+		
 		ctx.arc(
-				this.center.x + cam.offSet.x - this.size/2,
-				this.center.y + cam.offSet.y,
-				6 * cam.zoom,
+				this.center.x + cam.offSet.x + this.size/2,
+				this.center.y + cam.offSet.y - this.size/6,
+				5.5 * cam.zoom,
 				0,
 				2*Math.PI
 				);
 				
-		ctx.closePath();
-		ctx.fillStyle = "blue";
+		ctx.fillStyle = "green";
 		ctx.fill();		
 		ctx.stroke();
-		*/
-	
+		ctx.closePath();
+		
+		ctx.beginPath();
+		ctx.fillStyle = "white";
+		ctx.font = "bolder " + 6 * cam.zoom + "pt Trebuchet MS,Tahoma,Verdana,Arial,sans-serif";
+		ctx.textAlign = "center";
+		ctx.textBaseline = "middle";
+		ctx.fillText(
+					friendFleets,
+					this.center.x + cam.offSet.x + this.size/2,
+					this.center.y + cam.offSet.y - this.size/6
+					)
+		ctx.closePath();
 	}
 	
-			
-	 
-	if (fleets > 0){
+	if (hostileFleets > 0){
 		ctx.beginPath();
-		/*
-		ctx.moveTo(
-				this.center.x + cam.offSet.x,
-				this.center.y + cam.offSet.y - this.size/5
-				);					
-		ctx.lineTo(
-				this.center.x + cam.offSet.x - this.size/2,
-				this.center.y + cam.offSet.y + this.size/1.25
-				);
-				
-		ctx.lineTo(
-				this.center.x + cam.offSet.x + this.size/2,
-				this.center.y + cam.offSet.y + this.size/1.25
-				);
-		ctx.lineTo(
-				this.center.x + cam.offSet.x,
-				this.center.y + cam.offSet.y - this.size/5
-				);
-		*/
 		
 		ctx.arc(
 				this.center.x + cam.offSet.x + this.size/2,
-				this.center.y + cam.offSet.y,
-				6 * cam.zoom,
+				this.center.y + cam.offSet.y + this.size/3,
+				5.5 * cam.zoom,
 				0,
 				2*Math.PI
 				);
@@ -288,19 +390,20 @@ Hexagon.prototype.drawContent = function(ctx){
 		
 		ctx.beginPath();
 		ctx.fillStyle = "white";
-		ctx.font = "bolder " + 7 * cam.zoom + "pt Trebuchet MS,Tahoma,Verdana,Arial,sans-serif";
+		ctx.font = "bolder " + 6 * cam.zoom + "pt Trebuchet MS,Tahoma,Verdana,Arial,sans-serif";
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
 		ctx.fillText(
-					fleets,
+					hostileFleets,
 					this.center.x + cam.offSet.x + this.size/2,
-					this.center.y + cam.offSet.y
+					this.center.y + cam.offSet.y + this.size/3
 					)
 		ctx.closePath();
 	}
-			
 
-	ctx.beginPath();
+}
+
+Hexagon.prototype.drawID = function(ctx){	ctx.beginPath();
 	ctx.font = "bolder " + 7*cam.zoom +"pt Trebuchet MS,Tahoma,Verdana,Arial,sans-serif";
 	ctx.textAlign = "center";
 	ctx.textBaseline = 'middle';
@@ -338,11 +441,12 @@ Hexagon.prototype.drawContent = function(ctx){
 				this.center.y + cam.offSet.y -(this.size / 1.8)
 				);	
 	ctx.closePath();
-
 }
 
-
 Hexagon.prototype.drawLanes = function(ctx){
+
+	//if (! this.visible){ return; }
+	
 	ctx.clearRect(0, 0, width, height);
 		
 	if (this.hasJumpgate){
@@ -360,6 +464,7 @@ Hexagon.prototype.drawLanes = function(ctx){
 				
 				for (var j = 1; j < this.contains[i].lane.path.length; j++){
 					var hex = grid.getHexById(this.contains[i].lane.path[j]);
+			//		console.log(hex.id);
 					
 						ctx.lineTo(
 							hex.center.x + cam.offSet.x,
@@ -370,18 +475,28 @@ Hexagon.prototype.drawLanes = function(ctx){
 
 				}
 				
-				ctx.lineWidth = 3 * cam.zoom;
+				ctx.lineWidth = 5 * cam.zoom;
 				ctx.strokeStyle = "darkcyan";
 				ctx.stroke();
 			}
 		}
 	}
 }
-	
+
 Hexagon.prototype.getContent = function(id){
 	for (var i = 0; i < this.contains.length; i++){
 		if (this.contains[i].id == id){
 			return this.contains[i];
+		}
+	}
+}
+
+Hexagon.prototype.getLaneById = function(laneid){
+	for (var i = 0; i < this.contains.length; i++){
+		if (this.contains[i] instanceof Jumpgate) {
+			if (this.contains[i].lane.id == laneid) {
+				return this.contains[i];
+			}
 		}
 	}
 }
@@ -402,7 +517,7 @@ Hexagon.prototype.getAdjacent = function(){
 	var y = this.id[1];
 	
 	if (x % 2 != 0){
-		var valid = [
+		valid = [
 			[x, y - 1],
 			[x + 1, y],
 			[x + 1, y + 1],
@@ -412,7 +527,7 @@ Hexagon.prototype.getAdjacent = function(){
 		];
 	}
 	else {
-		var valid = [
+		valid = [
 			[x, y - 1],
 			[x + 1, y - 1],
 			[x + 1, y],
@@ -420,9 +535,7 @@ Hexagon.prototype.getAdjacent = function(){
 			[x - 1, y],
 			[x - 1, y - 1],
 		];
-	}
-	
-	
+	}	
 	
 	for (var i = 0; i < valid.length; i++){
 		for (var j = 0; j < grid.hexes.length; j++){

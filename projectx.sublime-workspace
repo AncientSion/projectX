@@ -1,0 +1,1971 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"JSON",
+				"json_encode"
+			],
+			[
+				"var",
+				"var_export"
+			],
+			[
+				"Fetch",
+				"FETCH_ASSOC"
+			],
+			[
+				"exe",
+				"execute"
+			],
+			[
+				"Fet",
+				"FETCH_ASSOC"
+			],
+			[
+				"erro",
+				"errorCode"
+			],
+			[
+				"fetch",
+				"FETCH_ASSOC"
+			],
+			[
+				"isE",
+				"isEqual"
+			],
+			[
+				"getL",
+				"getLastInsertId"
+			],
+			[
+				"p",
+				"possibleLanes"
+			],
+			[
+				"gate",
+				"gateSelected"
+			],
+			[
+				"off",
+				"offSetX"
+			],
+			[
+				"getH",
+				"getHexById"
+			],
+			[
+				"act",
+				"activeHover"
+			],
+			[
+				"ships",
+				"shipActions"
+			],
+			[
+				"getElement",
+				"getElementsByTagName"
+			],
+			[
+				"cont",
+				"contextmenu"
+			],
+			[
+				"border",
+				"border-bottom"
+			],
+			[
+				"update",
+				"updatePlayerStatus"
+			],
+			[
+				"createF",
+				"createFleetAndTransfer"
+			],
+			[
+				"selected",
+				"selectedHex"
+			],
+			[
+				"createPlanetN",
+				"createPlanetNotes1"
+			],
+			[
+				"createEne",
+				"createPlanetEnviroment"
+			],
+			[
+				"backgrou",
+				"background"
+			],
+			[
+				"backgr",
+				"background-color"
+			],
+			[
+				"JSO",
+				"json_encode"
+			],
+			[
+				"class",
+				"class_exists"
+			],
+			[
+				"mysql",
+				"mysql_query"
+			],
+			[
+				"js",
+				"json_encode"
+			],
+			[
+				"json",
+				"json_decode"
+			],
+			[
+				"mysqli",
+				"mysqli_fetch"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"inline",
+				"inline-block"
+			],
+			[
+				"s",
+				"success"
+			],
+			[
+				"f",
+				"function"
+			],
+			[
+				"succ",
+				"successSubmit"
+			],
+			[
+				"request",
+				"requestHexContentTEST"
+			],
+			[
+				"a",
+				"AjaxManager"
+			],
+			[
+				"drawPla",
+				"drawPlanetLayer"
+			],
+			[
+				"active",
+				"activePlanet"
+			],
+			[
+				"drawSy",
+				"drawSystemBackground"
+			],
+			[
+				"systems",
+				"systemImages"
+			],
+			[
+				"requ",
+				"requiredSpace"
+			],
+			[
+				"farmin",
+				"farmAffinity"
+			],
+			[
+				"mooN",
+				"moonNumber"
+			],
+			[
+				"checkforH",
+				"checkForHoverOutNearPlanet"
+			],
+			[
+				"paret",
+				"parentLoc"
+			],
+			[
+				"Par",
+				"parentLoc"
+			],
+			[
+				"check",
+				"checkForHoverOutNearPlanet"
+			],
+			[
+				"checkSy",
+				"checkSystemHover"
+			],
+			[
+				"xml",
+				"XMLHttpRequest"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"appendch",
+				"appendCHild"
+			],
+			[
+				"creatE",
+				"createEmpireDiv"
+			],
+			[
+				"systemb",
+				"systemBG"
+			],
+			[
+				"ne",
+				"newLanes"
+			],
+			[
+				"origin",
+				"originId"
+			],
+			[
+				"orig",
+				"originId"
+			],
+			[
+				"or",
+				"originId"
+			],
+			[
+				"stroke",
+				"strokeStyle"
+			],
+			[
+				"desti",
+				"destinationLoc"
+			],
+			[
+				"get",
+				"getSystemById"
+			],
+			[
+				"fill",
+				"fillStyle"
+			],
+			[
+				"in",
+				"inline"
+			],
+			[
+				"creat",
+				"createCanvas"
+			],
+			[
+				"getShip",
+				"getShipByID"
+			],
+			[
+				"getS",
+				"getSystemByID"
+			],
+			[
+				"offs",
+				"offsetX"
+			],
+			[
+				"offse",
+				"offsetY"
+			],
+			[
+				"offset",
+				"offsetY"
+			],
+			[
+				"fireO",
+				"fireOrderArray"
+			],
+			[
+				"fS",
+				"fShaderQuellcode"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"ac",
+				"activeRaidID"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "style.css",
+			"settings":
+			{
+				"buffer_size": 3365,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "hexagon/script.js",
+			"settings":
+			{
+				"buffer_size": 24299,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "game.php",
+			"settings":
+			{
+				"buffer_size": 5945,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "hexagon/index.html",
+			"settings":
+			{
+				"buffer_size": 1574,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "ajax.js",
+			"settings":
+			{
+				"buffer_size": 16709,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "hexagon/baseEvents.js",
+			"settings":
+			{
+				"buffer_size": 7696,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 22 files for \"fleetTableClick\"\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\baseEvents.js:\n  281  \n  282  			\n  283: function fleetTableClick(e){\n  284  	if (transfer.active == false){\n  285  		if (!selectedFleet){\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\script.js:\n  575  				}\n  576  			}\n  577: 			table.addEventListener(\"click\", fleetTableClick);\n  578  		}	\n  579  		\n\n2 matches across 2 files\n\n\nSearching 22 files for \"isvisibiler\"\n\n0 matches\n\nSearching 22 files for \"instanceof\"\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\Grid.js:\n  289  			if (! found){\n  290  				for (var j = 0; j < result[i].contains.length; j++){\n  291: 					if (result[i].contains[j] instanceof Jumpgate){\n  292  						if (result[i].contains[j].lane.id == laneId){\n  293  							//console.log(result[i].contains[j].lane.id);\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\HexagonTools.js:\n  118  	if (! this.isVisible){\n  119  		for (var i = 0; i < this.contains.length; i++){\n  120: 			if (this.contains[i].instanceof Fleet || this.contains[i].instanceof Planet){\n  121  				if (this.contains[i].owner == userid){\n  122  					this.visible = true;\n  ...\n  208  \n  209  	for (var i = 0; i < this.contains.length; i++){\n  210: 		if (this.contains[i] instanceof Jumpgate) {\n  211  			if (this.contains[i].lane.id == laneid) {\n  212  				if (! this.contains[i].lane.highlight) {\n  ...\n  262  \n  263  	for (var i = 0; i < this.contains.length; i++){\n  264: 		if (this.contains[i] instanceof Planet){\n  265  			planet = this.contains[i];\n  266  		}\n  267: 		else if (this.contains[i] instanceof Fleet){\n  268  			if (this.contains[i].owner == userid){\n  269  				friendFleets++;\n  ...\n  427  \n  428  		for (var i = 0; i < this.contains.length; i++){\n  429: 			if (this.contains[i] instanceof Jumpgate){\n  430  				ctx.beginPath();\n  431  				ctx.moveTo(\n  ...\n  468  Hexagon.prototype.getLaneById = function(laneid){\n  469  	for (var i = 0; i < this.contains.length; i++){\n  470: 		if (this.contains[i] instanceof Jumpgate) {\n  471  			if (this.contains[i].lane.id == laneid) {\n  472  				return this.contains[i];\n  ...\n  478  Hexagon.prototype.getFleetById = function(id){\n  479  	for (var i = 0; i < this.contains.length; i++){\n  480: 		if (this.contains[i].id == id && this.contains[i] instanceof Fleet){\n  481  			return this.contains[i];\n  482  		}\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\admin.js:\n 1063  \n 1064  		for (var i = 0; i < hex.contains.length; i++){\n 1065: 			if (hex.contains[i] instanceof Jumpgate){\n 1066  				gates.push(hex.contains[i]);\n 1067  			}\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\movement.js:\n  141  \n  142  		for (var i = 0; i < this.currentHex.contains.length; i++){\n  143: 			if (this.currentHex.contains[i] instanceof Jumpgate){\n  144  				if (isEqual(hex.id, this.currentHex.contains[i].lane.path[1])){\n  145  					this.possibleLanes.push(this.currentHex.contains[i].lane);\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\script.js:\n  146  	for (var i = 0; i < hex.contains.length; i++){\n  147  \n  148: 		if (hex.contains[i] instanceof Jumpgate){\n  149  \n  150  			var lane = hex.contains[i].lane\n  ...\n  187  				table.appendChild(tr)	\n  188  		}\n  189: 		else if (hex.contains[i] instanceof Planet){\n  190  \n  191  			var icon = hex.contains[i].icon;\n  ...\n  393  			}	\n  394  		}\n  395: 		else if (hex.contains[i] instanceof Fleet){\n  396  		\n  397  			fleetFound = true;\n  ...\n  438  							\n  439  						for (var l = 0; l < laneOriginHex.contains.length; l++){\n  440: 							if (laneOriginHex.contains[l] instanceof Jumpgate){\n  441  								if (laneOriginHex.contains[l].lane.id == hex.contains[i].validLanes[m].laneid){\n  442  									\n  ...\n  611  \n  612  		for (var i = 0; i < hex.contains.length; i++){\n  613: 			if (hex.contains[i] instanceof Fleet){\n  614  				var option = document.createElement(\"option\");\n  615  					option.innerHTML = hex.contains[i].name;\n  ...\n  836  						for (var i = 0; i < selectedHex.contains.length; i++){\n  837  							if (selectedHex.contains[i].id == id) {\n  838: 								if (selectedHex.contains[i] instanceof Planet){\n  839  									selectedHex.contains[i].name = name;\n  840  									ajax.changeElementName(type, id, name);\n  ...\n  847  						for (var i = 0; i < selectedHex.contains.length; i++){\n  848  							if (selectedHex.contains[i].id == id) {\n  849: 								if (selectedHex.contains[i] instanceof Fleet){\n  850  									selectedHex.contains[i].name = name;\n  851  									ajax.changeElementName(type, id, name);\n  ...\n  857  					else if (type == \"ship\"){\n  858  						for (var i = 0; i < selectedHex.contains.length; i++){\n  859: 							if (selectedHex.contains[i] instanceof Fleet){\n  860  								for (var j = 0; j < selectedHex.contains[i].ships.length; j++){\n  861  									if (selectedHex.contains[i].ships[j].id == id){\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\transfer.js:\n   30  \n   31  			for (var i = 0; i < selectedHex.contains.length; i++){\n   32: 				if (selectedHex.contains[i] instanceof Fleet){\n   33  					if (selectedHex.contains[i].name == name){\n   34  						this.targetFleet = selectedHex.contains[i].id;\n   ..\n  133  		console.log(\"ding\");\n  134  		for (var i = 0; i < selectedHex.contains.length; i++){\n  135: 			if (selectedHex.contains[i] instanceof Fleet){\n  136  				if (selectedHex.contains[i].id == selectedFleet.id ){\n  137  \n  ...\n  153  \n  154  			for (var j = 0; j < selectedHex.contains.length;j++){\n  155: 				if (selectedHex.contains[j] instanceof Fleet){\n  156  					var fleet = selectedHex.contains[j];\n  157  \n  ...\n  169  \n  170  		for (var i = 0; i < selectedHex.contains.length; i++){\n  171: 			if (selectedHex.contains[i] instanceof Fleet){\n  172  				if (selectedHex.contains[i].id == this.targetFleet){\n  173  					for (var j = 0; j < this.ships.length; j++){\n\n23 matches across 6 files\n\n\nSearching 23 files for \"requested\"\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\gameProcess.php:\n   25  \n   26  if (isset($_POST[\"requestProcess\"])){\n   27: 	Debug::log(\"process requested\");\n   28  	$manager->processTurnForGame($_GET[\"gameid\"], $_GET[\"turn\"]);\n   29  	Debug::log(\"process done\");\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\log.txt:\n    1: process requested\n    2  1\n    3  1\n    4  process done\n    5  1\n    6: process requested\n    7  1\n    8  1\n\n3 matches across 2 files\n\n\nSearching 23 files for \"getFleetInfoForTurnProcession\"\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\dbManager.php:\n 1244  \n 1245  \n 1246: 	public function getFleetInfoForTurnProcession($gameid){\n 1247  \n 1248  		debug::log(\"ding\");\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\gameManager.php:\n  187  	}\n  188  \n  189: 	public function getFleetInfoForTurnProcession(){\n  190  		debug::log(\"request from GM -> DB\");\n  191: 		$data = DBManager::app()->getFleetInfoForTurnProcession($this->gameid);		\n  192  		debug::log(sizeof($data));\n  193  		debug::log(\"returning result from GM\");\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\gameProcess.php:\n   20  	$welcome .= \"Game Procession Overview for game: \".$_GET[\"gameid\"].\" @ turn: \".$_GET[\"turn\"];\n   21  	\n   22: 	$fleetsInfo = $dbManager->getFleetInfoForTurnProcession($_GET[\"gameid\"]);\n   23  	\n   24  }\n\nD:\\SecureWAMP_Portable\\htdocs\\projectX\\getGameData.php:\n   69  		else if ($_GET[\"type\"] == \"fleetData\"){\n   70  			debug::log(\"request from GGD to GM\");\n   71: 						$fleets = $manager->getFleetInfoForTurnProcession();\n   72  			debug::log(\"returning result from GGD\");\n   73  			echo JSON_encode($fleets, JSON_NUMERIC_CHECK);\n\n5 matches across 4 files\n",
+			"settings":
+			{
+				"buffer_size": 7536,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "hexagon/Grid.js",
+			"settings":
+			{
+				"buffer_size": 6239,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "hexagon/HexagonTools.js",
+			"settings":
+			{
+				"buffer_size": 12781,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "hexagon/movement.js",
+			"settings":
+			{
+				"buffer_size": 7567,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "hexagon/transfer.js",
+			"settings":
+			{
+				"buffer_size": 5274,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "hexagon/admin.js",
+			"settings":
+			{
+				"buffer_size": 30285,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "hexagon/baseClasses.js",
+			"settings":
+			{
+				"buffer_size": 2518,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "hexagon/cam.js",
+			"settings":
+			{
+				"buffer_size": 1100,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "log.txt",
+			"settings":
+			{
+				"buffer_size": 1830,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "gameProcess.php",
+			"settings":
+			{
+				"buffer_size": 4313,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "table.php",
+			"settings":
+			{
+				"buffer_size": 3742,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "gameManager.php",
+			"settings":
+			{
+				"buffer_size": 3632,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dbManager.php",
+			"settings":
+			{
+				"buffer_size": 26699,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "getGameData.php",
+			"settings":
+			{
+				"buffer_size": 1921,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "postGameData.php",
+			"settings":
+			{
+				"buffer_size": 3779,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "gameSetup.php",
+			"settings":
+			{
+				"buffer_size": 2929,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "createGame.php",
+			"settings":
+			{
+				"buffer_size": 787,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "logout.php",
+			"settings":
+			{
+				"buffer_size": 314,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 311.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"brack",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 416.0
+	},
+	"console":
+	{
+		"height": 426.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/SecureWAMP_Portable/htdocs/projectX/gameManager.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/log.txt",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/jquery-2.1.1.min.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/projectx.sublime-workspace",
+		"/D/SecureWAMP_Portable/htdocs/projectX/projectx.sublime-project",
+		"/D/Downloads/Urho3D-1.5/Urho3D-1.5/bin/Data/Scripts/25_Urho2DParticle.as",
+		"/D/Downloads/Urho3D-1.5-Windows-SHARED/Urho3D-1.5-Windows-SHARED/share/Urho3D/Resources/Data/Scripts/01_HelloWorld.as",
+		"/D/Downloads/Urho3D-1.5-Windows-SHARED/Urho3D-1.5-Windows-SHARED/share/Urho3D/Resources/Data/Scripts/03_Sprites.as",
+		"/D/Downloads/Urho3D-1.5-Windows-SHARED/Urho3D-1.5-Windows-SHARED/share/Urho3D/Resources/Data/Scripts/Utilities/Sample.as",
+		"/D/Downloads/Urho3D-1.5-Windows-SHARED/Urho3D-1.5-Windows-SHARED/share/Urho3D/Resources/Data/Scripts/26_ConsoleInput.as",
+		"/D/Downloads/Urho3D-1.5/Urho3D-1.5/bin/Data/Scripts/07_Billboards.as",
+		"/D/Downloads/Urho3D-1.5-Windows-SHARED/Urho3D-1.5-Windows-SHARED/share/Urho3D/Resources/Data/Scripts/test.as",
+		"/D/Downloads/Urho3D-1.5-Windows-SHARED/Urho3D-1.5-Windows-SHARED/share/Urho3D/Resources/Data/Scripts/04_StaticScene.as",
+		"/D/Downloads/Urho3D-1.5/Urho3D-1.5/bin/Data/Scripts/30_LightAnimation.as",
+		"/D/SecureWAMP_Portable/htdocs/projectX/dbManager.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/game.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/createGame.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/getGameData.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/postGameData.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/style.css",
+		"/D/SecureWAMP_Portable/htdocs/projectX/gameProcess.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/script.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/Grid.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/ajax.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/admin.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/cam.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/baseEvents.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/baseClasses.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/movement.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/HexagonTools.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/transfer.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/index.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/lobby.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/gameSetup.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/logout.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/table.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/debug.php",
+		"/I/SecureWAMP_Portable/htdocs/projectX/gameProcess.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/Debug.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/GameManager.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/DBManager.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/pickGame.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/hexagon/ajaxManager.js",
+		"/D/SecureWAMP_Portable/htdocs/projectX/game - Copy.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/script.js",
+		"/D/SecureWAMP_Portable/htdocs/index.html",
+		"/D/SecureWAMP_Portable/htdocs/index.php",
+		"/D/SecureWAMP_Portable/htdocs/admin.js",
+		"/D/SecureWAMP_Portable/htdocs/baseEvents.js",
+		"/D/SecureWAMP_Portable/htdocs/ajaxManager.js",
+		"/D/SecureWAMP_Portable/htdocs/movement.js",
+		"/D/SecureWAMP_Portable/htdocs/script.js",
+		"/D/SecureWAMP_Portable/htdocs/Grid.js",
+		"/D/SecureWAMP_Portable/htdocs/HexCalcs.js",
+		"/D/SecureWAMP_Portable/htdocs/HexagonTools.js",
+		"/D/SecureWAMP_Portable/htdocs/baseClasses.js",
+		"/D/SecureWAMP_Portable/htdocs/table.php",
+		"/D/SecureWAMP_Portable/htdocs/manager.php",
+		"/D/SecureWAMP_Portable/htdocs/landing.html",
+		"/D/SecureWAMP_Portable/htdocs/dbManager.php",
+		"/D/SecureWAMP_Portable/htdocs/log.txt",
+		"/D/SecureWAMP_Portable/htdocs/laneSubmit.php",
+		"/D/SecureWAMP_Portable/htdocs/projectX/index.html",
+		"/D/SecureWAMP_Portable/htdocs/projectX/landing.html",
+		"/D/SecureWAMP_Portable/htdocs/test.php",
+		"/D/SecureWAMP_Portable/htdocs/reg.php",
+		"/D/SecureWAMP_Portable/htdocs/style.css",
+		"/D/SecureWAMP_Portable/htdocs/index - Copy.html",
+		"/D/SecureWAMP_Portable/htdocs/simulator/test.php",
+		"/D/SecureWAMP_Portable/htdocs/simulator/hexfiller.php",
+		"/D/SecureWAMP_Portable/htdocs/hexFiller.php",
+		"/D/SecureWAMP_Portable/htdocs/switchfile.php",
+		"/H/Ultimate/buildings.js",
+		"/H/Ultimate/script.js",
+		"/H/Ultimate/style.css",
+		"/H/Ultimate/index.html",
+		"/H/ajax/index.html",
+		"/H/ajax/script.js",
+		"/C/Users/Chris/AppData/Roaming/Sublime Text 3/Packages/Emmet/Emmet.sublime-settings",
+		"/D/MoO3/Autobuild.txt",
+		"/H/SpaceSim/script.js",
+		"/H/SpaceSim/style.css",
+		"/H/SpaceSim/index.html",
+		"/D/MoO3/Moo3Patcher/RaceAlias.ini.sample",
+		"/D/MoO3/Moo3Patcher/RaceConfig.ini.sample",
+		"/D/code/index.html",
+		"/D/code/style.css",
+		"/D/code/script.js",
+		"/H/coding/SpaceClash/index.html",
+		"/H/coding/SpaceClash/style.css",
+		"/H/coding/SpaceClash/script.js",
+		"/H/coding/test/script.js",
+		"/H/coding/test/style.css",
+		"/H/coding/test/index.html",
+		"/H/coding/Vikings/script.js",
+		"/H/coding/Vikings/style.css",
+		"/H/coding/Vikings/index.html",
+		"/H/coding/Vikings/jquery-ui.css",
+		"/H/coding/Vikings/jquery-2.1.1.min.js"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"getFleetInfoForTurnProcession",
+			"\"ding\"",
+			"){\n",
+			"json",
+			"requested",
+			"instanceof",
+			"isvisib",
+			"isvisibiler",
+			"isvisible",
+			"\"planet",
+			"fleetTableClick",
+			"\"planet",
+			"CreateSmoke",
+			"SubscribeToEvents",
+			"SubscribeToEvent",
+			"SetWindowTitleAndIcon",
+			"getFleetInfoForTurnProcession",
+			"getfleet",
+			"function isE",
+			"pickMovement",
+			"getLaneOriginByLaneId",
+			"this.activefleet.va",
+			"drawsi",
+			"high",
+			"hight",
+			"\"turn NOT adjusted\"",
+			"commit",
+			"cancommit",
+			"waiting",
+			"endcu",
+			"end",
+			"\nno user id",
+			"endCurrentTurn",
+			"order",
+			"endturn",
+			"endCurrentTurn",
+			"turn",
+			"end",
+			"postGameData",
+			"endturn",
+			"cancommit",
+			"#",
+			"cancommit",
+			"endturn",
+			"commitmoves",
+			"endturn",
+			"commitmoves",
+			"endTurn",
+			"end",
+			"confirmEndTurn",
+			"cancommit",
+			"canCommit",
+			"you cant",
+			"getGameStatus",
+			"playerresu",
+			"select",
+			"validateLogin",
+			"getLaneOriginInRadiusByLaneId",
+			"animatering",
+			"highlight",
+			"getLaneOriginInRadiusByLaneId",
+			"adja =",
+			"adja",
+			"fleet:",
+			"fleetselected",
+			"model",
+			"connected to:",
+			"getValidLanesForFleets",
+			"gethex",
+			"gethexbyid",
+			"gethexby",
+			"gethex",
+			"getPossibleLanes",
+			"possibleLanes",
+			"valid",
+			"fleetId",
+			"(fetch",
+			"where",
+			"left jo",
+			"new movem",
+			"insertMoves",
+			"parse",
+			"classname",
+			"ckassbane+",
+			"deleteFleet",
+			"disband",
+			"isnertnewflee",
+			"elint",
+			"var_export",
+			"\"moves\"",
+			"isnertnew",
+			"this.createFleet",
+			"createfleet",
+			"new movement",
+			"new fleet",
+			"showFleetCreationDialog",
+			"create new fleet",
+			"lane/g",
+			"Deb",
+			"delete",
+			"query",
+			"or ",
+			"or",
+			"delete from",
+			"query",
+			"getgates",
+			"select which",
+			"hex.center.x",
+			"getLaneById",
+			"getSpecificLane",
+			"gateLaneItem",
+			"postGateAndLane",
+			"gateCreationDiv",
+			"endgat",
+			"startgate",
+			"array",
+			"getgatesandla",
+			"getgates",
+			"getlane",
+			"getla",
+			"join",
+			"join ",
+			"getlane",
+			"createGatesAndLanes",
+			"insertlane",
+			"insertLane",
+			"gateLaneItems",
+			"jumpla"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"fleetid",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 15,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3365,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								928,
+								928
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "hexagon/script.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 24299,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5511,
+								5511
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2893.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "game.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5945,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5518,
+								5518
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 351.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "hexagon/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1574,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "ajax.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16709,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4974,
+								4974
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4361.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "hexagon/baseEvents.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7696,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6636,
+								6638
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4960.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7536,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										139,
+										154
+									],
+									[
+										354,
+										369
+									],
+									[
+										690,
+										700
+									],
+									[
+										1015,
+										1025
+									],
+									[
+										1052,
+										1062
+									],
+									[
+										1255,
+										1265
+									],
+									[
+										1482,
+										1492
+									],
+									[
+										1585,
+										1595
+									],
+									[
+										1782,
+										1792
+									],
+									[
+										2004,
+										2014
+									],
+									[
+										2290,
+										2300
+									],
+									[
+										2507,
+										2517
+									],
+									[
+										2760,
+										2770
+									],
+									[
+										3079,
+										3089
+									],
+									[
+										3236,
+										3246
+									],
+									[
+										3371,
+										3381
+									],
+									[
+										3564,
+										3574
+									],
+									[
+										3798,
+										3808
+									],
+									[
+										4099,
+										4109
+									],
+									[
+										4399,
+										4409
+									],
+									[
+										4681,
+										4691
+									],
+									[
+										5016,
+										5026
+									],
+									[
+										5288,
+										5298
+									],
+									[
+										5497,
+										5507
+									],
+									[
+										5689,
+										5699
+									],
+									[
+										6031,
+										6040
+									],
+									[
+										6214,
+										6223
+									],
+									[
+										6286,
+										6295
+									],
+									[
+										6492,
+										6521
+									],
+									[
+										6668,
+										6697
+									],
+									[
+										6782,
+										6811
+									],
+									[
+										7116,
+										7145
+									],
+									[
+										7369,
+										7398
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								7120,
+								7120
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 5,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ 	].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3330.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "hexagon/Grid.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6239,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "hexagon/HexagonTools.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12781,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2360,
+								2360
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1751.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "hexagon/movement.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7567,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5148,
+								5148
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3609.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "hexagon/transfer.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5274,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "hexagon/admin.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 30285,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "hexagon/baseClasses.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2518,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "hexagon/cam.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1100,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "log.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1830,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "gameProcess.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4313,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4297,
+								4297
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2862.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "table.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3742,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3443,
+								3443
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 432.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 17,
+					"file": "gameManager.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3632,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3625,
+								3625
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2898.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "dbManager.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 26699,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25636,
+								25636
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 22500.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "getGameData.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1921,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1907,
+								1907
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 918.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "postGameData.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3779,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								377,
+								377
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2655.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "gameSetup.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2929,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "createGame.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 787,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "logout.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 314,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 34.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.559124010992,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "projectx.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"table",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\table.php"
+			],
+			[
+				"mov",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\movement.js"
+			],
+			[
+				"tble",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\table.php"
+			],
+			[
+				"adm",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\admin.js"
+			],
+			[
+				"ajax",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\ajax.js"
+			],
+			[
+				"transfer",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\transfer.js"
+			],
+			[
+				"admin",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\admin.js"
+			],
+			[
+				"postgame",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\postGameData.php"
+			],
+			[
+				"sc",
+				"D:\\SecureWAMP_Portable\\htdocs\\projectX\\hexagon\\script.js"
+			],
+			[
+				"scrip",
+				"D:\\SecureWAMP_Portable\\htdocs\\script.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 205.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

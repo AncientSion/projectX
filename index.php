@@ -21,9 +21,11 @@ if (isset($_POST["username"]) && isset($_POST["password"])){
 	//		echo "no conn established</br>";
 	//	}
 
-		$id = $dbManager->validateLogin($_POST["username"], $_POST["password"]);
-		if ($id){
-			$_SESSION["userid"] = $id;
+		$data = $dbManager->validateLogin($_POST["username"], $_POST["password"]);
+		if ($data){
+		//	var_dump($data);
+			$_SESSION["userid"] = $data["id"];
+			$_SESSION["access"] = $data["access"];
 			header("Location: lobby.php");	
 		}
 		else {
@@ -58,7 +60,7 @@ else if (isset($_POST["newUsername"]) && isset($_POST["newPassword"])){
 		<div id="loginDiv" class="lobbyDiv">
 			<form method="post">
 				<input type="form" style="margin-bottom: 5px; margin-top: 5px" placeholder="Enter Username here" name="username"></input>
-				<input type="form" style="margin-bottom: 5px;"placeholder="Enter Password here" name="password"></input>
+				<input type="form" style="margin-bottom: 5px;"placeholder="Enter Password here" name="password" value="147147"></input>
 				<input type="submit" style="width: auto; display: block;" value="Login"></input>	
 				</br>
 			</form>

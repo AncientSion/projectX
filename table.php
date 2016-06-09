@@ -8,10 +8,10 @@ require_once("debug.php");
 session_start();
 
 	$server = "localhost";
-	$user ="aatu";
-	$pw = "Kiiski";
-	//$user ="root";
-	//$pw = "147147";
+	//$user ="aatu";
+	//$pw = "Kiiski";
+	$user ="root";
+	$pw = "147147";
 	$db = "projectx";	
 
 	$connect = mysql_connect($server, $user, $pw);
@@ -148,9 +148,6 @@ $sql[] = "CREATE TABLE sectorspecials (
 			)";
 
 
-$sql[] = "ALTER TABLE jumplanes ADD gameid INT (3) AFTER id";
-
-
 $sql[] = "CREATE TABLE markers (
 			id INT (3) AUTO_INCREMENT PRIMARY KEY,
 			gameid INT (3),
@@ -164,11 +161,59 @@ $sql[] = "CREATE TABLE markers (
 	*/
 
 
-$sql[] = "ALTER TABLE jumplanes ADD startGate INT (3) AFTER gameid";
-$sql[] = "ALTER TABLE jumplanes ADD endGate INT (3) AFTER startGate";
-$sql[] = "TRUNCATE TABLE jumplanes";
-$sql[] = "TRUNCATE TABLE jumpgates";
+/*
 
+
+
+	
+$sql[] = "TRUNCATE TABLE jumpgates";
+$sql[] = "DROP TABLE jumplanes";
+
+$sql[] = "CREATE TABLE jumplanes (
+			id INT (5) AUTO_INCREMENT PRIMARY KEY,
+			startGate INT (3),
+			endGate INT (3)
+		)";
+
+	
+$sql[] = "CREATE TABLE lanesteps (
+			id INT (5) AUTO_INCREMENT PRIMARY KEY,
+			jumplaneid INT (3),
+			x INT (3),
+			y INT (3)
+		)";
+
+
+//$sql[] = "ALTER TABLE fleets DROP COLUMN elint";
+
+
+$sql[] = "CREATE TABLE validlanes (
+			id INT (5) AUTO_INCREMENT PRIMARY KEY,
+			fleetid INT (3),
+			jumplaneid INT (3),
+			validForTurn INT (3)
+		)";
+
+$sql[] = "CREATE TABLE subticks (
+			id INT (5) AUTO_INCREMENT PRIMARY KEY,
+			gameid INT (3),
+			turn INT (3),
+			subtick INT (3)
+		)";
+
+
+*/
+
+
+$sql[] = "CREATE TABLE osats (
+			id INT (5) AUTO_INCREMENT PRIMARY KEY,
+			gameid INT (3),
+			playerid INT (3),
+			x INT (3),
+			y INT (3),
+			type VARCHAR (255),
+			elint BOOL
+		)";
 
 	foreach ($sql as $query){
 		if (mysql_query($query, $connect)) {
