@@ -7,11 +7,7 @@ require_once("debug.php");
 
 session_start();
 
-
-$welcome = "";
-
-//var_export($_SESSION);
-
+var_export($_SESSION);
 
 if (isset($_SESSION["userid"])
 	&&
@@ -43,69 +39,22 @@ if (isset($_SESSION["userid"])
 	
 	
 </head>
-	<body><!--
-		<?php
-			echo "<table class='processTable'>";
-			echo "<tr><th colSpan = 7>".$welcome."</th></tr>";
-
-			echo "<tr>";
-			echo "<th>Fleet ID</th>";
-			echo "<th>Owner ID</th>";
-			echo "<th>Fleet Name</th>";
-			echo "<th>X</th>";
-			echo "<th>Y</th>";
-			echo "<th>MOVES</th>";
-			echo "<th>HMP Treshold for Move</th>";
-			echo "</tr>";
-
-			foreach ($fleetsInfo as $info){
-
-				$need = 0;
-
-				echo "<tr style='border: 2px solid white; border-collapse: collapse'>";
-
-				foreach ($info as $key => $value){
-					if ($key != "moves"){
-						echo "<th>";
-						echo $value;
-						echo "</th>";
-					}
-					else {
-						echo "<th></th>";
-						echo "<th></th>";
-
-						foreach ($value as $move){
-							$need = $need + $move["hmp"];
-							echo "<tr><td><td><td><td><td><td>";
-							echo $move["x"]."-".$move["y"]." @ ".$move["hmp"]." HMP";
-							echo "<td>".$need."</td>";
-							echo "</td></td></td></td></td></td></td></tr>";
-						}
-					}
-				}
-				echo "</tr>";
-			}
-
-			echo "</table>";
-		?>	
-
-	-->
-
-				<a style="margin: auto" href="lobby.php">Return to Lobby</a>
-			<div class="lobbyDiv" style="display: block; width: 200px; font-size: 15px; padding: 3px;">
-				<span>Current Subtick:</span>
-				<?php
-					echo "<span id='curSubTick' style='color:red; font-size: 20px;'>".$currentSubTick."</span>";
-					echo "<span style='font-size: 20px;'> / 24</span>";
-				 ?>	
-				<input id ="advanceButton" style="width: 150;" value="advance 1 subtick" onclick="advance()">
-			</div>
+	<body>	
+		<a style="margin: auto" href="lobby.php">Return to Lobby</a>
+		<div class="lobbyDiv" style="display: block; width: 200px; font-size: 15px; padding: 3px;">
+			<span>Current Subtick:</span>
+			<?php
+				echo "<span id='curSubTick' style='color:red; font-size: 20px;'>".$currentSubTick."</span>";
+				echo "<span style='font-size: 20px;'> / 24</span>";
+			 ?>	
+			<input id ="advanceButton" style="width: 150;" value="advance 1 subtick" onclick="advance()">
+		</div>
 
 		<!--	<div class="lobbyDiv" style="width: 120px; background-color: red">
 				<form method="post">
 					<input type="submit" value="Process This Turn" name="requestProcess"></input>
-				</form>-->
-			</div>
+				</form>
+			</div>-->
 			</br>
 	</body>
 </html>
