@@ -1,7 +1,5 @@
 <?php
 
-print "debug";
-
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 require_once("dbManager.php");
@@ -36,7 +34,9 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["username"])) {
 	<script src="jquery-2.1.1.min.js"></script>	
 </head>
 	<body>	
+		</br>
 		<a style="margin: auto" href="lobby.php">Return to Lobby</a>
+		</br>
 		<div class="lobbyDiv" style="display: block; width: 200px; font-size: 15px; padding: 3px;">
 			<span>Current Subtick:</span>
 			<?php
@@ -46,11 +46,14 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["username"])) {
 			<input id ="advanceButton" style="width: 150;" value="advance 1 subtick" onclick="advance()"><input>
 		</div>
 		</br>
-		<!--	<div class="lobbyDiv" style="width: 120px; background-color: red">
+
+		<!--
+			<div class="lobbyDiv" style="width: 120px; background-color: red">
 				<form method="post">
 					<input type="submit" value="Process This Turn" name="requestProcess"></input>
 				</form>
-			</div>-->
+			</div>
+		-->
 	
 	</body>
 </html>
