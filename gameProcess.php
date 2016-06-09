@@ -1,6 +1,9 @@
 <?php
 
-error_reporting(E_ALL); ini_set('display_errors', '1');
+print "debug";
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 require_once("dbManager.php");
 require_once("gameManager.php");
 require_once("debug.php");
@@ -9,9 +12,7 @@ session_start();
 
 var_export($_SESSION);
 
-if (isset($_SESSION["userid"])
-	&&
-	isset($_SESSION["username"])) {
+if (isset($_SESSION["userid"]) && isset($_SESSION["username"])) {
 		$dbManager = DBManager::app();
 		$manager = new Manager($_SESSION["userid"], $_GET["gameid"]);
 	//	$turn = $dbManager->getCurrentTurn($_GET["gameid"]);
@@ -23,8 +24,6 @@ if (isset($_SESSION["userid"])
 		echo "<script> var currentSubTick = ".json_encode(Intval($currentSubTick, JSON_NUMERIC_CHECK))."</script>";
 	
 }
-
-
 
 
 ?>
@@ -43,15 +42,15 @@ if (isset($_SESSION["userid"])
 				echo "<span id='curSubTick' style='color:red; font-size: 20px;'>".$currentSubTick."</span>";
 				echo "<span style='font-size: 20px;'> / 24</span>";
 			 ?>	
-			<input id ="advanceButton" style="width: 150;" value="advance 1 subtick" onclick="advance()">
+			<input id ="advanceButton" style="width: 150;" value="advance 1 subtick" onclick="advance()"><input>
 		</div>
-
+		</br>
 		<!--	<div class="lobbyDiv" style="width: 120px; background-color: red">
 				<form method="post">
 					<input type="submit" value="Process This Turn" name="requestProcess"></input>
 				</form>
 			</div>-->
-			</br>
+	
 	</body>
 </html>
 
@@ -59,7 +58,7 @@ if (isset($_SESSION["userid"])
 
 	window.onload = function(e){
 
-		var keys = ["F-ID", "O-ID", "Name", "X", "Y", "Moves", "Treshold"];
+		var cols = ["F-ID", "O-ID", "Name", "X", "Y", "Moves", "Treshold"];
 		
 		var tables = [];
 		
@@ -76,9 +75,9 @@ if (isset($_SESSION["userid"])
 				
 			var tr = document.createElement("tr");
 
-			for (var i = 0; i < keys.length; i++){
+			for (var i = 0; i < cols.length; i++){
 				var th = document.createElement("th");
-					th.innerHTML = keys[i];
+					th.innerHTML = cols[i];
 					th.style.border = "1px solid white";
 
 					tr.appendChild(th);
