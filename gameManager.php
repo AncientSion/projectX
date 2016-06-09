@@ -98,7 +98,7 @@ class Manager {
 			$steps = DBManager::app()->getLaneSteps($lane["id"]);
 
 			foreach ($steps as $step){
-				$lane["path"][] = [$step["x"], $step["y"]];
+				$lane["path"][] = array($step["x"], $step["y"]);
 			}
 
 
