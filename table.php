@@ -8,10 +8,10 @@ require_once("debug.php");
 session_start();
 
 	$server = "localhost";
-	//$user ="aatu";
-	//$pw = "Kiiski";
-	$user ="root";
-	$pw = "147147";
+	$user ="aatu";
+	$pw = "Kiiski";
+	//$user ="root";
+	//$pw = "147147";
 	$db = "projectx";	
 
 	$connect = mysql_connect($server, $user, $pw);
