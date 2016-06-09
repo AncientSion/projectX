@@ -254,7 +254,7 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["username"])) {
 		//	console.log(fleetsInfo[i]);
 		}
 		
-		if (currentSubTick == 10){
+		if (currentSubTick == 24){
 			document.getElementById("advanceButton").style.backgroundColor = "red";
 			document.getElementById("advanceButton").value = "PROCESS SERVER";
 		//	document.getElementById("advanceButton").setAttribute("onClick", "javascript: process()");
