@@ -216,7 +216,7 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["username"])) {
 								fleetsInfo[i].stopped = true;
 								fleetsInfo[j].stopped = true;
 
-								console.log("fleet #" + fleetsInfo[i].id + " has found fleet #" + fleetsInfo[j].id);
+								alert("fleet #" + fleetsInfo[i].id + " has found fleet #" + fleetsInfo[j].id);
 
 								for (var k = 0; k < tables.length; k++){
 									var fleetid = $(tables[k]).data("fleetid");
