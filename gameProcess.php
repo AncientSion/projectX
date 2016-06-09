@@ -18,7 +18,8 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["username"])) {
 	//	$turn = $dbManager->getCurrentTurn($_GET["gameid"]);
 		
 		$fleetsInfo = $dbManager->getFleetInfoForTurnProcession($_GET["gameid"]);
-		$currentSubTick = $manager->getSubTickForGame($_GET["gameid"])["subtick"];
+		$currentSubTick = $manager->getSubTickForGame($_GET["gameid"]);
+		$currentSubTick = $currentSubTick["subtick"];
 
 		echo "<script> var fleetsInfo = ".json_encode($fleetsInfo, JSON_NUMERIC_CHECK)."</script>";
 		echo "<script> var currentSubTick = ".json_encode(Intval($currentSubTick, JSON_NUMERIC_CHECK))."</script>";
